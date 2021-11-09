@@ -2,12 +2,12 @@
 #include <QFile>
 #include <QRegularExpression>
 #include <iostream>
-#include <set>
+#include <QMap>
 
-void FileParser::loadFile(const QString &fileName)
+bool FileParser::loadFile(const QString &fileName)
 {
     QFile file(fileName.last(fileName.length()-8));
-    std::set<QString> words;
+    QMap<QString, uint32_t> words;
     if(file.exists())
     {
         file.open(QIODevice::ReadOnly);
@@ -23,7 +23,7 @@ void FileParser::loadFile(const QString &fileName)
                 {
                     QString word = line.first(space).toLower();
                     word.remove(QRegularExpression("[^a-z\\-]"));
-                    words.insert(word);
+                    words.contains(word) ? words.insert(word, words.value(word)+1) : words.insert(word, 1);
 
                     line.remove(0, space + 1);
                     space = line.indexOf(" ");
@@ -32,13 +32,17 @@ void FileParser::loadFile(const QString &fileName)
             if(line.length())
             {
                 line.remove(QRegularExpression("[^a-z\\-]"));
-                words.insert(line);
+                words.contains(line) ? words.insert(line, words.value(line)+1) : words.insert(line, 0);
             }
             std::cout << "Done" << std::endl;
+            return true;
         }
         else
             std::cout << "Can't open file" << std::endl;
     }
     else
         std::cout << "File doesn't exits" << std::endl;
+
+    return false;
 }
+

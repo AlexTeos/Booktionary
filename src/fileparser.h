@@ -8,7 +8,7 @@ class FileParser : public QObject
 {
     Q_OBJECT
 public slots:
-    void loadFile(const QString &fileName);
+    bool loadFile(const QString &fileName);
 };
 
 #endif // MYCLASS_H
