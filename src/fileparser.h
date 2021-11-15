@@ -1,7 +1,8 @@
 #ifndef MYCLASS_H
 #define MYCLASS_H
 
-#include <QDebug>
+#include <QList>
+#include <QMap>
 #include <QObject>
 
 class FileParser : public QObject
@@ -11,6 +12,7 @@ public slots:
     bool loadFile(const QString& fileName, const int readLineSize = 256);
 
 public:
+    QList<QString>                 getWordList();
     const QMap<QString, uint32_t>& getWords();
     void                           reset();
 

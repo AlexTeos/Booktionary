@@ -3,6 +3,7 @@
 #include <QObject>
 #include <QQmlApplicationEngine>
 
+#include "dictionary.h"
 #include "fileparser.h"
 
 int main(int argc, char* argv[])
@@ -15,6 +16,7 @@ int main(int argc, char* argv[])
 
     FileParser fileParser;
     QObject::connect(item, SIGNAL(loadFile(QString)), &fileParser, SLOT(loadFile(QString)));
+    Dictionary dictionary(fileParser.getWordList());
 
     return app.exec();
 }

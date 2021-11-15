@@ -57,6 +57,11 @@ const QMap<QString, uint32_t>& FileParser::getWords()
     return words;
 }
 
+QList<QString> FileParser::getWordList()
+{
+    return words.keys();
+}
+
 void FileParser::reset()
 {
     words.clear();

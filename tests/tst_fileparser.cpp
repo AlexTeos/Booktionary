@@ -1,3 +1,4 @@
+#include <QtAlgorithms>
 #include <QtTest>
 
 #include "../src/fileparser.h"
@@ -35,20 +36,37 @@ QVector<QPair<QString, QString>> testTexts = {
      "345crossing, cross4645.3466the cross coarse\n\n\r\n\r\n\r\n\r\n\r\ncow#%@%.{}{},>across.>#%#%>>>..%#the*#@*&% "
      "crowded cow [[[]]]}crossing{{ }}}carefully."}};
 
-QMap<QString, uint32_t> crossTextWordList = {{"cross", 4},
-                                             {"cow", 2},
-                                             {"cow-cow", 2},
-                                             {"a", 2},
-                                             {"across", 2},
-                                             {"crowded", 2},
-                                             {"crossing", 2},
-                                             {"the", 2},
-                                             {"if", 1},
-                                             {"you", 1},
-                                             {"must", 1},
-                                             {"course", 1},
-                                             {"coarse", 1},
-                                             {"carefully", 1}};
+QMap<QString, uint32_t> crossTextWordMap = {{"cross", 4},
+                                            {"cow", 2},
+                                            {"cow-cow", 2},
+                                            {"a", 2},
+                                            {"across", 2},
+                                            {"crowded", 2},
+                                            {"crossing", 2},
+                                            {"the", 2},
+                                            {"if", 1},
+                                            {"you", 1},
+                                            {"must", 1},
+                                            {"course", 1},
+                                            {"coarse", 1},
+                                            {"carefully", 1}};
+
+QList<QString> crossTextWordList = {
+    "cross",
+    "cow",
+    "cow-cow",
+    "a",
+    "across",
+    "crowded",
+    "crossing",
+    "the",
+    "if",
+    "you",
+    "must",
+    "course",
+    "coarse",
+    "carefully",
+};
 
 class TestFileParser : public QObject
 {
@@ -58,6 +76,7 @@ private slots:
     void initTestCase();
     void cleanupTestCase();
     void testLoadFile();
+    void testWordMap();
     void testWordList();
 
 private:
@@ -112,14 +131,46 @@ bool isEqual(const QMap<QString, uint32_t>& map1, const QMap<QString, uint32_t>&
     return map2.size();
 }
 
-void TestFileParser::testWordList()
+bool isEqual(const QList<QString>& list1, const QList<QString>& list2)
+{
+    if (list1.length() != list1.length()) return false;
+
+    QList<QString> tempList1(list1);
+    QList<QString> tempList2(list2);
+
+    std::sort(tempList1.begin(), tempList1.end());
+    std::sort(tempList2.begin(), tempList2.end());
+
+    auto list2Iter = tempList2.begin();
+    foreach(auto list1Value, tempList1)
+    {
+        if (list1Value != *list2Iter) return false;
+        ++list2Iter;
+    }
+
+    return true;
+}
+
+void TestFileParser::testWordMap()
 {
     QVector<uint32_t> testValues = {512, 24, 5};
     QString           fileName   = "file:///" + testTexts[1].first;
     foreach(auto testValue, testValues)
     {
         QVERIFY(fileParser.loadFile(fileName, testValue));
-        QVERIFY(isEqual(fileParser.getWords(), crossTextWordList));
+        QVERIFY(isEqual(fileParser.getWords(), crossTextWordMap));
+        fileParser.reset();
+    }
+}
+
+void TestFileParser::testWordList()
+{
+    QVector<uint32_t> testValues = {768, 33, 7};
+    QString           fileName   = "file:///" + testTexts[1].first;
+    foreach(auto testValue, testValues)
+    {
+        QVERIFY(fileParser.loadFile(fileName, testValue));
+        QVERIFY(isEqual(fileParser.getWordList(), crossTextWordList));
         fileParser.reset();
     }
 }
