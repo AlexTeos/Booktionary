@@ -9,7 +9,8 @@ CONFIG += c++11
 SOURCES += \
         dictionary.cpp \
         fileparser.cpp \
-        main.cpp
+        main.cpp \
+        translator.cpp
 
 RESOURCES += qml.qrc
 
@@ -26,4 +27,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     dictionary.h \
-    fileparser.h
+    fileparser.h \
+    translator.h \
+    word.h
