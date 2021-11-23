@@ -1,11 +1,6 @@
 #ifndef DICTIONARY_H
 #define DICTIONARY_H
 
-#include <QList>
-#include <QMultiMap>
-#include <QPair>
-#include <QVector>
-
 #include "word.h"
 
 enum DictionaryState

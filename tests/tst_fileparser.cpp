@@ -1,7 +1,4 @@
-#include <QtAlgorithms>
-#include <QtTest>
-
-#include "../src/fileparser.h"
+#include "tst_fileparser.h"
 
 QVector<QPair<QString, QString>> testTexts = {
     {"wikipedia",
@@ -66,21 +63,6 @@ QList<QString> crossTextWordList = {
     "course",
     "coarse",
     "carefully",
-};
-
-class TestFileParser : public QObject
-{
-    Q_OBJECT
-
-private slots:
-    void initTestCase();
-    void cleanupTestCase();
-    void testLoadFile();
-    void testWordMap();
-    void testWordList();
-
-private:
-    FileParser fileParser;
 };
 
 void TestFileParser::initTestCase()
@@ -174,7 +156,3 @@ void TestFileParser::testWordList()
         fileParser.reset();
     }
 }
-
-#include "tst_fileparser.moc"
-
-QTEST_APPLESS_MAIN(TestFileParser)

@@ -1,4 +1,4 @@
-QT += quick
+QT += quick network
 
 CONFIG += c++11
 
@@ -10,7 +10,8 @@ SOURCES += \
         dictionary.cpp \
         fileparser.cpp \
         main.cpp \
-        translator.cpp
+        translator.cpp\
+        word.cpp
 
 RESOURCES += qml.qrc
 
