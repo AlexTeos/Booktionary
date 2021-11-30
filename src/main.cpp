@@ -5,6 +5,7 @@
 
 #include "dictionary.h"
 #include "fileparser.h"
+#include "outputgenerator.h"
 
 int main(int argc, char* argv[])
 {

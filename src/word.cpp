@@ -1,8 +1,8 @@
 #include "word.h"
 
-void Word::addDefinition(const PartOfSpeach& PartOfSpeach, const Definiton& definiton)
+void Word::addDefinition(const PartOfSpeach& PartOfSpeach, const Definition& definition)
 {
-    if (not definitions.contains(PartOfSpeach)) definitions.insert(PartOfSpeach, definiton);
+    if (not definitions.contains(PartOfSpeach)) definitions.insert(PartOfSpeach, definition);
 }
 
 QString Word::getWord() const

@@ -51,6 +51,8 @@ PartOfSpeach Translator::localPOStoWordPOS(const QString localPOS)
         return PartOfSpeach::Conjunction;
     else if (localPOS == "interjection")
         return PartOfSpeach::Interjection;
+    else if (localPOS == "participle")
+        return PartOfSpeach::Participle;
     else
         return PartOfSpeach::Unknown;
 }
@@ -66,7 +68,7 @@ bool Translator::parseResultAndFillWord(const QByteArray& reply, Word& word)
     {
         QString    partofspch   = partOfSpeach.toObject().take("pos").toString();
         QJsonArray translations = partOfSpeach.toObject().take("tr").toArray();
-        Definiton  definition;
+        Definition definition;
         foreach(QJsonValueRef translation, translations)
         {
             definition.meaning.push_back(translation.toObject().take("text").toString());

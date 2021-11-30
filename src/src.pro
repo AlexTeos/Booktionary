@@ -10,6 +10,7 @@ SOURCES += \
         dictionary.cpp \
         fileparser.cpp \
         main.cpp \
+        outputgenerator.cpp \
         translator.cpp\
         word.cpp
 
@@ -29,5 +30,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     dictionary.h \
     fileparser.h \
+    outputgenerator.h \
     translator.h \
     word.h

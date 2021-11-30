@@ -14,9 +14,14 @@ class Dictionary
 {
 public:
     explicit Dictionary(const QList<QString>& wordList);
+    explicit Dictionary(const QList<Word>& _dictionary, const DictionaryState& _state);
+
+    using const_iterator = QVector<Word>::const_iterator;
+    const_iterator begin() const { return dictionary.cbegin(); }
+    const_iterator end() const { return dictionary.cend(); }
 
 private:
-    QVector<Word>   dictionary;
+    QList<Word>     dictionary;
     DictionaryState state;
 };
 
