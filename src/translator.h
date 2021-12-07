@@ -22,6 +22,7 @@ public:
 private:
     bool parseResultAndFillWord(const QByteArray& reply, Word& word);
     bool getTranslation(QByteArray& reply, const Word& word);
+    bool loadKey(const QString& keyFileName, QString Key);
 
     QString         apiKey;
     TranslatorState state;

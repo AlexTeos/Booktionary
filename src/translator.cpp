@@ -17,17 +17,17 @@ Translator::Translator(const QString& keyFileName) : state(TranslatorState::Unin
 
 bool Translator::initialize(const QString& keyFileName)
 {
-    QFile keyFile(keyFileName);
-    if (keyFile.exists())
+    if (loadKey(keyFileName, apiKey))
     {
-        keyFile.open(QIODevice::ReadOnly);
-        apiKey = keyFile.readAll();
-        state  = TranslatorState::Initialized;
-        return true;
+        QByteArray tmp;
+        if (getTranslation(tmp, Word("the")))
+        {
+            state = TranslatorState::Initialized;
+            return true;
+        }
     }
 
     state = TranslatorState::InitializationError;
-
     return false;
 }
 
@@ -72,6 +72,21 @@ bool Translator::parseResultAndFillWord(const QByteArray& reply, Word& word)
         foreach(QJsonValueRef translation, translations)
         {
             definition.meaning.push_back(translation.toObject().take("text").toString());
+
+            QJsonArray examples = translation.toObject().take("ex").toArray();
+
+            foreach(QJsonValueRef example, examples)
+            {
+                QString exampleText = example.toObject().take("text").toString();
+
+                QJsonArray exampleTranslationArray = example.toObject().take("tr").toArray();
+                QString    exampleTranslationText;
+                foreach(QJsonValueRef exampleTranslation, exampleTranslationArray)
+                {
+                    exampleTranslationText += exampleTranslation.toObject().take("text").toString();
+                    definition.examples.push_back(OriginalAndTranslation(exampleText, exampleTranslationText));
+                }
+            }
         }
         word.addDefinition(localPOStoWordPOS(partofspch), definition);
     }
@@ -104,6 +119,22 @@ bool Translator::getTranslation(QByteArray& reply, const Word& word)
     reply = _reply->readAll();
 
     return true;
+}
+
+bool Translator::loadKey(const QString& keyFileName, QString Key)
+{
+    QFile keyFile(keyFileName);
+    if (keyFile.exists())
+    {
+        keyFile.open(QIODevice::ReadOnly);
+        apiKey = keyFile.readAll();
+        state  = TranslatorState::Initialized;
+        return true;
+    }
+
+    state = TranslatorState::InitializationError;
+
+    return false;
 }
 
 bool Translator::translate(Word& word)

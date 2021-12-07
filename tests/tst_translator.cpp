@@ -21,7 +21,7 @@ const QString ApiKeyFileName = "yandexDictionaryKey.txt";
 
 void TestTranslator::initTestCase()
 {
-    translator.initialize(ApiKeyFileName);
+    QVERIFY(translator.initialize(ApiKeyFileName));
 }
 
 void TestTranslator::cleanupTestCase() {}
