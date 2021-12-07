@@ -4,7 +4,7 @@
 #include <QQmlApplicationEngine>
 
 #include "dictionary.h"
-#include "fileparser.h"
+#include "inputparser.h"
 #include "outputgenerator.h"
 
 int main(int argc, char* argv[])
@@ -15,9 +15,9 @@ int main(int argc, char* argv[])
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     QObject* item = engine.rootObjects().first();
 
-    FileParser fileParser;
-    QObject::connect(item, SIGNAL(loadFile(QString)), &fileParser, SLOT(loadFile(QString)));
-    Dictionary dictionary(fileParser.getWordList());
+    InputParser inputParser;
+    QObject::connect(item, SIGNAL(loadFile(QString)), &inputParser, SLOT(loadFile(QString)));
+    Dictionary dictionary(inputParser.getWordList());
 
     return app.exec();
 }

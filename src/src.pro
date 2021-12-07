@@ -8,7 +8,7 @@ CONFIG += c++11
 
 SOURCES += \
         dictionary.cpp \
-        fileparser.cpp \
+        inputparser.cpp \
         main.cpp \
         outputgenerator.cpp \
         translator.cpp\
@@ -29,7 +29,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     dictionary.h \
-    fileparser.h \
+    inputparser.h \
     outputgenerator.h \
     translator.h \
     word.h

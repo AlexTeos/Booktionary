@@ -1,4 +1,4 @@
-#include "tst_fileparser.h"
+#include "tst_inputparser.h"
 
 QVector<QPair<QString, QString>> testTexts = {
     {"wikipedia",
@@ -65,7 +65,7 @@ QList<QString> crossTextWordList = {
     "carefully",
 };
 
-void TestFileParser::initTestCase()
+void TestInputParser::initTestCase()
 {
     foreach(auto testText, testTexts)
     {
@@ -78,7 +78,7 @@ void TestFileParser::initTestCase()
     }
 }
 
-void TestFileParser::cleanupTestCase()
+void TestInputParser::cleanupTestCase()
 {
     foreach(auto testText, testTexts)
     {
@@ -88,14 +88,14 @@ void TestFileParser::cleanupTestCase()
     }
 }
 
-void TestFileParser::testLoadFile()
+void TestInputParser::testLoadFile()
 {
     QVector<uint32_t> testValues = {1024, 16, 3};
     QString           fileName   = "file:///" + testTexts[0].first;
     foreach(auto testValue, testValues)
     {
-        QVERIFY(fileParser.loadFile(fileName, testValue));
-        fileParser.reset();
+        QVERIFY(inputParser.loadFile(fileName, testValue));
+        inputParser.reset();
     }
 }
 
@@ -133,26 +133,26 @@ bool isEqual(const QList<QString>& list1, const QList<QString>& list2)
     return true;
 }
 
-void TestFileParser::testWordMap()
+void TestInputParser::testWordMap()
 {
     QVector<uint32_t> testValues = {512, 24, 5};
     QString           fileName   = "file:///" + testTexts[1].first;
     foreach(auto testValue, testValues)
     {
-        QVERIFY(fileParser.loadFile(fileName, testValue));
-        QVERIFY(isEqual(fileParser.getWords(), crossTextWordMap));
-        fileParser.reset();
+        QVERIFY(inputParser.loadFile(fileName, testValue));
+        QVERIFY(isEqual(inputParser.getWords(), crossTextWordMap));
+        inputParser.reset();
     }
 }
 
-void TestFileParser::testWordList()
+void TestInputParser::testWordList()
 {
     QVector<uint32_t> testValues = {768, 33, 7};
     QString           fileName   = "file:///" + testTexts[1].first;
     foreach(auto testValue, testValues)
     {
-        QVERIFY(fileParser.loadFile(fileName, testValue));
-        QVERIFY(isEqual(fileParser.getWordList(), crossTextWordList));
-        fileParser.reset();
+        QVERIFY(inputParser.loadFile(fileName, testValue));
+        QVERIFY(isEqual(inputParser.getWordList(), crossTextWordList));
+        inputParser.reset();
     }
 }

@@ -5,7 +5,7 @@
 #include <QMap>
 #include <QObject>
 
-class FileParser : public QObject
+class InputParser : public QObject
 {
     Q_OBJECT
 public slots:

@@ -1,11 +1,11 @@
-#include "fileparser.h"
+#include "inputparser.h"
 
 #include <QFile>
 #include <QMap>
 #include <QRegularExpression>
 #include <iostream>
 
-bool FileParser::loadFile(const QString& fileName, const int readLineSize)
+bool InputParser::loadFile(const QString& fileName, const int readLineSize)
 {
     QFile file(fileName.last(fileName.length() - 8));
     if (file.exists())
@@ -52,17 +52,17 @@ bool FileParser::loadFile(const QString& fileName, const int readLineSize)
     return false;
 }
 
-const QMap<QString, uint32_t>& FileParser::getWords()
+const QMap<QString, uint32_t>& InputParser::getWords()
 {
     return words;
 }
 
-QList<QString> FileParser::getWordList()
+QList<QString> InputParser::getWordList()
 {
     return words.keys();
 }
 
-void FileParser::reset()
+void InputParser::reset()
 {
     words.clear();
 }

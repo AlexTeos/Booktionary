@@ -1,9 +1,9 @@
 #include <QtAlgorithms>
 #include <QtTest>
 
-#include "../src/fileparser.h"
+#include "../src/inputparser.h"
 
-class TestFileParser : public QObject
+class TestInputParser : public QObject
 {
     Q_OBJECT
 
@@ -15,5 +15,5 @@ private slots:
     void testWordList();
 
 private:
-    FileParser fileParser;
+    InputParser inputParser;
 };
