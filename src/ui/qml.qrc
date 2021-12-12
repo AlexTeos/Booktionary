@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>AppSettings.qml</file>
+        <file>Start.qml</file>
+        <file>MyControls/MyPushButton.qml</file>
+        <file>qmldir</file>
+    </qresource>
+</RCC>

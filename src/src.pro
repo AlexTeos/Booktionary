@@ -14,7 +14,7 @@ SOURCES += \
         translator.cpp\
         word.cpp
 
-RESOURCES += qml.qrc
+RESOURCES += ui/qml.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
