@@ -52,8 +52,8 @@ Page {
         title: "Please choose a file"
         onAccepted: {
             console.log("You chose: " + fileDialog.currentFile)
-            visible = false
-            loadFile(fileDialog.currentFile)
+            if(inputParser.loadFile(fileDialog.currentFile))
+                swipeView.setCurrentIndex(kDictionaryPage)
         }
         onRejected: {
             console.log("Canceled")

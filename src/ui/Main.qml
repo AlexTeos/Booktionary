@@ -10,6 +10,9 @@ ApplicationWindow {
     visible: true
     title: qsTr("Booktionary")
 
+    property int kStartPage           : 0
+    property int kDictionaryPage      : 1
+
     Component.onCompleted: {
         AppSettings.wWidth = Qt.binding(function() {return width})
         AppSettings.wHeight = Qt.binding(function() {return height})
@@ -23,6 +26,10 @@ ApplicationWindow {
 
           Start{
               id:startPage
+          }
+
+          Dictionary{
+              id:dictionaryPage
           }
       }
 }

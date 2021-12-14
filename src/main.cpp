@@ -2,6 +2,7 @@
 #include <QGuiApplication>
 #include <QObject>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
 
 #include "dictionary.h"
 #include "inputparser.h"
@@ -16,7 +17,7 @@ int main(int argc, char* argv[])
     QObject* item = engine.rootObjects().first();
 
     InputParser inputParser;
-    QObject::connect(item, SIGNAL(loadFile(QString)), &inputParser, SLOT(loadFile(QString)));
+    engine.rootContext()->setContextProperty("inputParser", &inputParser);
     Dictionary dictionary(inputParser.getWordList());
 
     return app.exec();
