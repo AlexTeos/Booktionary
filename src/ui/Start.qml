@@ -1,28 +1,18 @@
 import QtQuick 2.15
-import QtQuick.Window 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import QtQuick.Dialogs
 import "MyControls"
 
-ApplicationWindow {
-    width: 360
-    height: 800
-    visible: true
-    title: qsTr("Booktionary")
+Page {
+
+    signal loadFile(string fileName)
 
     background: Rectangle {
         z: -1
         anchors.fill: parent
         color: AppSettings.blueSoftColor
     }
-
-    Component.onCompleted: {
-        AppSettings.wWidth = Qt.binding(function() {return width})
-        AppSettings.wHeight = Qt.binding(function() {return height})
-    }
-
-    signal loadFile(string fileName)
 
     Column {
         anchors.centerIn: parent
