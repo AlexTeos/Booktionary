@@ -43,6 +43,7 @@ Page {
             font.pixelSize: AppSettings.fontSize_4
             onClicked: {
                 animate()
+                swipeView.setCurrentIndex(kSaveDictionaryPage)
             }
         }
     }

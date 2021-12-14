@@ -12,6 +12,7 @@ ApplicationWindow {
 
     property int kStartPage           : 0
     property int kDictionaryPage      : 1
+    property int kSaveDictionaryPage  : 2
 
     Component.onCompleted: {
         AppSettings.wWidth = Qt.binding(function() {return width})
@@ -30,6 +31,10 @@ ApplicationWindow {
 
           Dictionary{
               id:dictionaryPage
+          }
+
+          SaveDictionary{
+              id:saveDictionaryPage
           }
       }
 }

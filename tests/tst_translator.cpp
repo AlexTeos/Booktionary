@@ -32,6 +32,5 @@ void TestTranslator::testTranslate()
     {
         Word w(word);
         QVERIFY(translator.translate(w));
-        continue;
     }
 }

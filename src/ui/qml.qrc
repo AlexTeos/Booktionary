@@ -6,5 +6,6 @@
         <file>qmldir</file>
         <file>Main.qml</file>
         <file>Dictionary.qml</file>
+        <file>SaveDictionary.qml</file>
     </qresource>
 </RCC>

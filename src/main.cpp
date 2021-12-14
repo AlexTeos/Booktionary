@@ -7,6 +7,7 @@
 #include "dictionary.h"
 #include "inputparser.h"
 #include "outputgenerator.h"
+#include "translator.h"
 
 int main(int argc, char* argv[])
 {
