@@ -4,7 +4,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 
-#include "dictionary.h"
+#include "dictionarymodel.h"
 #include "inputparser.h"
 #include "outputgenerator.h"
 #include "translator.h"
@@ -14,12 +14,14 @@ int main(int argc, char* argv[])
     QGuiApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
-    engine.load(QUrl(QStringLiteral("qrc:/Main.qml")));
-    QObject* item = engine.rootObjects().first();
+    DictionaryModel       dictionaryModel;
 
-    InputParser inputParser;
+    engine.rootContext()->setContextProperty("dictionaryModel", &dictionaryModel);
+
+    InputParser inputParser(&dictionaryModel);
     engine.rootContext()->setContextProperty("inputParser", &inputParser);
-    Dictionary dictionary(inputParser.getWordList());
+
+    engine.load(QUrl(QStringLiteral("qrc:/Main.qml")));
 
     return app.exec();
 }
