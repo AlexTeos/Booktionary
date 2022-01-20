@@ -3,9 +3,12 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 Button {
+    property color backgroundColor
+    property real buttonRadius
+
     id: control
     hoverEnabled: false
-    property color backgroundColor
+    height: control.font.pixelSize * 2
 
     contentItem: Text {
         horizontalAlignment: Text.AlignHCenter
@@ -33,9 +36,13 @@ Button {
 
     background: Rectangle {
         id: control_rectangle
-        radius: height * 0.5
+        anchors.centerIn: control
+
+        height: control.height * 0.9
+        width: control.width * 0.95
+
         anchors.horizontalCenter: control.horizontalCenter
         color: control.backgroundColor
-        width: control.width * 0.95
+        radius: buttonRadius
     }
 }

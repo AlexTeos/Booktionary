@@ -33,6 +33,7 @@ Page {
             width: parent.width
             backgroundColor: AppSettings.blueLightColor
 
+            buttonRadius: AppSettings.standartRadius
             text: qsTr("Choose file...")
             font.pixelSize: AppSettings.fontSize_6
             onClicked: {
@@ -48,7 +49,8 @@ Page {
         fileMode: FileDialog.SaveFile
         onAccepted: {
             console.log("You chose: " + fileDialog.currentFile)
-            swipeView.setCurrentIndex(kStartPage)
+            if(inputParser.loadFile(fileDialog.currentFile))
+                swipeView.setCurrentIndex(kDictionaryPage)
         }
         onRejected: {
             console.log("Canceled")

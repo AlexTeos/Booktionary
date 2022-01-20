@@ -26,15 +26,15 @@ ApplicationWindow {
           interactive: false
 
           Start{
-              id:startPage
+              id: startPage
           }
 
           Dictionary{
-              id:dictionaryPage
+              id: dictionaryPage
           }
 
           SaveDictionary{
-              id:saveDictionaryPage
+              id: saveDictionaryPage
           }
       }
 }

@@ -37,7 +37,7 @@ Page {
             height: AppSettings.buttonNormalHeight
             width: parent.width
             backgroundColor: AppSettings.blueLightColor
-
+            buttonRadius: AppSettings.standartRadius
             text: qsTr("Choose file...")
             font.pixelSize: AppSettings.fontSize_6
             onClicked: {

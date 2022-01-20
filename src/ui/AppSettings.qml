@@ -7,9 +7,10 @@ Item {
     property int wWidth
 
     // Colors
-    readonly property color blueDarkColor: "#021b35"
+    readonly property color blueDarkColor:  "#021b35"
     readonly property color blueLightColor: "#0a82ff"
-    readonly property color blueSoftColor: "#cee6ff"
+    readonly property color blueSoftColor:  "#cee6ff"
+    readonly property color whiteColor:     "#ffffff"
 
     // Font sizes
     readonly property real fontSize_1: fontSize_8 * 0.2
@@ -24,4 +25,7 @@ Item {
     // Some other values
     readonly property real buttonSlimHeight: wHeight * 0.05
     readonly property real buttonNormalHeight: wHeight * 0.08
+    readonly property real standartRadius: (wWidth + wHeight) * 0.01
+    readonly property real standartMargin: (wWidth + wHeight) * 0.02
+    readonly property real standartSpacing: (wWidth + wHeight) * 0.005
 }
