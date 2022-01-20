@@ -1,9 +1,9 @@
 #ifndef MYCLASS_H
 #define MYCLASS_H
 
-#include <QList>
-#include <QMap>
 #include <QObject>
+
+#include "dictionarymodel.h"
 
 class InputParser : public QObject
 {
@@ -12,12 +12,12 @@ public slots:
     bool loadFile(const QString& fileName, const int readLineSize = 256);
 
 public:
-    QList<QString>                 getWordList();
-    const QMap<QString, uint32_t>& getWords();
-    void                           reset();
+    explicit InputParser();
+    explicit InputParser(DictionaryModel* dictiomaryModel);
+    void setDictionaryModel(DictionaryModel* newDictionaryModel);
 
 private:
-    QMap<QString, uint32_t> words;
+    DictionaryModel* m_dictionaryModel;
 };
 
 #endif // MYCLASS_H

@@ -1,68 +1,80 @@
 #include "inputparser.h"
 
 #include <QFile>
-#include <QMap>
 #include <QRegularExpression>
-#include <iostream>
+#include <QSet>
+
+InputParser::InputParser() : m_dictionaryModel(nullptr) {}
+
+InputParser::InputParser(DictionaryModel* dictiomaryModel) : m_dictionaryModel(dictiomaryModel) {}
 
 bool InputParser::loadFile(const QString& fileName, const int readLineSize)
 {
-    QFile file(fileName.last(fileName.length() - 8));
-    if (file.exists())
+    if (m_dictionaryModel != nullptr)
     {
-        file.open(QIODevice::ReadOnly);
-        if (file.isOpen())
+        QFile file(fileName.last(fileName.length() - 8));
+        if (file.exists())
         {
-            char    data[readLineSize];
-            QString line;
-            int     read_cont = file.read(data, readLineSize);
-            while (read_cont)
+            file.open(QIODevice::ReadOnly);
+            if (file.isOpen())
             {
-                line += QString::fromLocal8Bit(data, read_cont);
-
-                int space = line.indexOf(QRegularExpression("[,. \n\r]"));
-                while (space != -1)
-
+                QSet<QString> words;
+                char          data[readLineSize];
+                QString       line;
+                int           read_cont = file.read(data, readLineSize);
+                while (read_cont)
                 {
-                    QString word = line.first(space).toLower();
-                    word.remove(QRegularExpression("[^a-z\\-]"));
-                    if (word.size())
-                        words.contains(word) ? words.insert(word, words.value(word) + 1) : words.insert(word, 1);
+                    line += QString::fromLocal8Bit(data, read_cont);
 
-                    line.remove(0, space + 1);
-                    space = line.indexOf(QRegularExpression("[,. \n\r]"));
+                    int space = line.indexOf(QRegularExpression("[,. \n\r]"));
+                    while (space != -1)
+
+                    {
+                        QString word = line.first(space).toLower();
+                        word.remove(QRegularExpression("[^a-z\\-]"));
+                        if (word.size())
+                        {
+                            if (not words.contains(word))
+                            {
+                                words.insert(word);
+                                m_dictionaryModel->addWord(word);
+                            }
+                        }
+
+                        line.remove(0, space + 1);
+                        space = line.indexOf(QRegularExpression("[,. \n\r]"));
+                    }
+
+                    read_cont = file.read(data, readLineSize);
+                }
+                if (line.length())
+                {
+                    line.remove(QRegularExpression("[^a-z\\-]"));
+                    if (line.size())
+                    {
+                        if (not words.contains(line))
+                        {
+                            words.insert(line);
+                            m_dictionaryModel->addWord(line);
+                        }
+                    }
                 }
 
-                read_cont = file.read(data, readLineSize);
+                return true;
             }
-            if (line.length())
-            {
-                line.remove(QRegularExpression("[^a-z\\-]"));
-                if (line.size())
-                    words.contains(line) ? words.insert(line, words.value(line) + 1) : words.insert(line, 0);
-            }
-            return true;
+            else
+                qWarning() << "Can't open file";
         }
         else
-            std::cout << "Can't open file" << std::endl;
+            qWarning() << "File doesn't exist";
     }
     else
-        std::cout << "File doesn't exits" << std::endl;
+        qCritical() << "Dictionary isn't set";
 
     return false;
 }
 
-const QMap<QString, uint32_t>& InputParser::getWords()
+void InputParser::setDictionaryModel(DictionaryModel* newDictionaryModel)
 {
-    return words;
-}
-
-QList<QString> InputParser::getWordList()
-{
-    return words.keys();
-}
-
-void InputParser::reset()
-{
-    words.clear();
+    m_dictionaryModel = newDictionaryModel;
 }
