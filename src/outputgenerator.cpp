@@ -10,12 +10,12 @@
 
 OutputGenerator::OutputGenerator() {}
 
-bool OutputGenerator::generateOutput(const Dictionary& dictionary, const QString& outputFileName)
+bool OutputGenerator::generateOutput(const DictionaryModel& dictionary, const QString& outputFileName)
 {
     QFile outputFile(outputFileName);
     if (outputFile.open(QIODevice::WriteOnly))
     {
-        foreach(Word word, dictionary)
+        for (const auto& word : dictionary)
         {
             foreach(Definition definition, word)
             {

@@ -1,14 +1,14 @@
 #ifndef OUTPUTGENERATOR_H
 #define OUTPUTGENERATOR_H
 
-#include "dictionary.h"
+#include "dictionarymodel.h"
 
 class OutputGenerator
 {
 public:
     OutputGenerator();
 
-    bool generateOutput(const Dictionary& dictionary, const QString& outputFileName);
+    bool generateOutput(const DictionaryModel& dictionary, const QString& outputFileName);
 };
 
 #endif // OUTPUTGENERATOR_H
