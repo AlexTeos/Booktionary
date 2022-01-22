@@ -1,6 +1,6 @@
 #include "tst_outputgenerator.h"
 
-#include "../src/dictionary.h"
+#include "../src/dictionarymodel.h"
 
 void TestOutputGenerator::initTestCase() {}
 
@@ -8,8 +8,7 @@ void TestOutputGenerator::cleanupTestCase() {}
 
 void TestOutputGenerator::testGenerateOutput()
 {
-    QList<Word> wordList;
-    wordList.reserve(3);
+    DictionaryModel dictionary;
     {
         Word word("defeat");
         {
@@ -44,7 +43,7 @@ void TestOutputGenerator::testGenerateOutput()
 
             word.addDefinition(PartOfSpeach::Adjective, definition);
         }
-        wordList.push_back(word);
+        dictionary.addWord(word);
     }
     {
         Word word("depressed");
@@ -75,7 +74,7 @@ void TestOutputGenerator::testGenerateOutput()
 
             word.addDefinition(PartOfSpeach::Adjective, definition);
         }
-        wordList.push_back(word);
+        dictionary.addWord(word);
     }
     {
         Word word("catch up");
@@ -89,12 +88,10 @@ void TestOutputGenerator::testGenerateOutput()
 
             word.addDefinition(PartOfSpeach::Verb, definition);
         }
-        wordList.push_back(word);
+        dictionary.addWord(word);
     }
 
-    Dictionary dictionary(wordList, DictionaryState::Translated);
-
-    QVERIFY(outputGenerator.generateOutput(dictionary, "testDictionary.dict"));
+    QVERIFY(m_outputGenerator.generateOutput(dictionary, "testDictionary.dict"));
 
     QFile::remove("testDictionary.dict");
 }

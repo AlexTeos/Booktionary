@@ -33,21 +33,6 @@ QVector<QPair<QString, QString>> testTexts = {
      "345crossing, cross4645.3466the cross coarse\n\n\r\n\r\n\r\n\r\n\r\ncow#%@%.{}{},>across.>#%#%>>>..%#the*#@*&% "
      "crowded cow [[[]]]}crossing{{ }}}carefully."}};
 
-QMap<QString, uint32_t> crossTextWordMap = {{"cross", 4},
-                                            {"cow", 2},
-                                            {"cow-cow", 2},
-                                            {"a", 2},
-                                            {"across", 2},
-                                            {"crowded", 2},
-                                            {"crossing", 2},
-                                            {"the", 2},
-                                            {"if", 1},
-                                            {"you", 1},
-                                            {"must", 1},
-                                            {"course", 1},
-                                            {"coarse", 1},
-                                            {"carefully", 1}};
-
 QList<QString> crossTextWordList = {
     "cross",
     "cow",
@@ -67,6 +52,7 @@ QList<QString> crossTextWordList = {
 
 void TestInputParser::initTestCase()
 {
+    m_inputParser.setDictionaryModel(&m_dictionary);
     foreach(auto testText, testTexts)
     {
         QFile testFile;
@@ -94,55 +80,25 @@ void TestInputParser::testLoadFile()
     QString           fileName   = "file:///" + testTexts[0].first;
     foreach(auto testValue, testValues)
     {
-        QVERIFY(inputParser.loadFile(fileName, testValue));
-        inputParser.reset();
+        QVERIFY(m_inputParser.loadFile(fileName, testValue));
+        m_dictionary.reset();
     }
 }
 
-bool isEqual(const QMap<QString, uint32_t>& map1, const QMap<QString, uint32_t>& map2)
+bool isEqual(const DictionaryModel& dictionary, QList<QString> list)
 {
-    QMap<QString, uint32_t> map2Tmp(map2);
-    foreach(auto map1Key, map1.keys())
+    if (dictionary.size() != list.length()) return false;
+
+    for (const auto& word : dictionary)
     {
-        if (map2Tmp.value(map1Key, 0) != map1.value(map1Key))
+        auto index = list.indexOf(word.getWord());
+        if (index == -1)
             return false;
         else
-            map2Tmp.remove(map1Key);
+            list.remove(index);
     }
 
-    return map2.size();
-}
-
-bool isEqual(const QList<QString>& list1, const QList<QString>& list2)
-{
-    if (list1.length() != list1.length()) return false;
-
-    QList<QString> tempList1(list1);
-    QList<QString> tempList2(list2);
-
-    std::sort(tempList1.begin(), tempList1.end());
-    std::sort(tempList2.begin(), tempList2.end());
-
-    auto list2Iter = tempList2.begin();
-    foreach(auto list1Value, tempList1)
-    {
-        if (list1Value != *list2Iter) return false;
-        ++list2Iter;
-    }
-
-    return true;
-}
-
-void TestInputParser::testWordMap()
-{
-    QVector<uint32_t> testValues = {512, 24, 5};
-    QString           fileName   = "file:///" + testTexts[1].first;
-    foreach(auto testValue, testValues)
-    {
-        QVERIFY(inputParser.loadFile(fileName, testValue));
-        QVERIFY(isEqual(inputParser.getWords(), crossTextWordMap));
-        inputParser.reset();
-    }
+    return not list.size();
 }
 
 void TestInputParser::testWordList()
@@ -151,8 +107,8 @@ void TestInputParser::testWordList()
     QString           fileName   = "file:///" + testTexts[1].first;
     foreach(auto testValue, testValues)
     {
-        QVERIFY(inputParser.loadFile(fileName, testValue));
-        QVERIFY(isEqual(inputParser.getWordList(), crossTextWordList));
-        inputParser.reset();
+        QVERIFY(m_inputParser.loadFile(fileName, testValue));
+        QVERIFY(isEqual(m_dictionary, crossTextWordList));
+        m_dictionary.reset();
     }
 }

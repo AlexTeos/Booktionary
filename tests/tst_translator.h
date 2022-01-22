@@ -13,5 +13,5 @@ private slots:
     void testTranslate();
 
 private:
-    Translator translator;
+    Translator m_translator;
 };

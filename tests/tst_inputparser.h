@@ -1,6 +1,7 @@
 #include <QtAlgorithms>
 #include <QtTest>
 
+#include "../src/dictionarymodel.h"
 #include "../src/inputparser.h"
 
 class TestInputParser : public QObject
@@ -11,9 +12,9 @@ private slots:
     void initTestCase();
     void cleanupTestCase();
     void testLoadFile();
-    void testWordMap();
     void testWordList();
 
 private:
-    InputParser inputParser;
+    InputParser     m_inputParser;
+    DictionaryModel m_dictionary;
 };

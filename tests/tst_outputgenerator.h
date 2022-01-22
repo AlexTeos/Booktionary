@@ -13,5 +13,5 @@ private slots:
     void testGenerateOutput();
 
 private:
-    OutputGenerator outputGenerator;
+    OutputGenerator m_outputGenerator;
 };
