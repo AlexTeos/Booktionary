@@ -33,3 +33,5 @@ HEADERS += \
     outputgenerator.h \
     translator.h \
     word.h
+
+DISTFILES +=

@@ -35,7 +35,7 @@ Page {
 
             buttonRadius: AppSettings.standartRadius
             text: qsTr("Choose file...")
-            font.pixelSize: AppSettings.fontSize_6
+            fontSize: AppSettings.fontSize_6
             onClicked: {
                 animate()
                 fileDialog.visible = true
@@ -49,7 +49,7 @@ Page {
         fileMode: FileDialog.SaveFile
         onAccepted: {
             console.log("You chose: " + fileDialog.currentFile)
-            if(inputParser.loadFile(fileDialog.currentFile))
+            if(outputGenerator.generateOutput(fileDialog.currentFile))
                 swipeView.setCurrentIndex(kDictionaryPage)
         }
         onRejected: {

@@ -30,7 +30,7 @@ Page {
             buttonRadius: AppSettings.standartRadius
             backgroundColor: AppSettings.blueLightColor
             text: qsTr("Back")
-            font.pixelSize: parent.height/2
+            fontSize: parent.height/2
             onClicked: {
                 animate()
                 swipeView.setCurrentIndex(kStartPage)
@@ -44,19 +44,30 @@ Page {
 
             buttonRadius: AppSettings.standartRadius
             backgroundColor: AppSettings.blueLightColor
-            text: qsTr("Save")
-            font.pixelSize: parent.height/2
+            text: if(dictionaryModel.state === 0)
+                      qsTr("Translate")
+                   else
+                      if(dictionaryModel.state === 1)
+                        qsTr("")
+                     else
+                        qsTr("Save")
+
+            animatedIcon: if(dictionaryModel.state === 1)
+                              "res/wait.gif"
+                           else
+                              ""
+            fontSize: parent.height/2
             onClicked: {
                 animate()
-                swipeView.setCurrentIndex(kSaveDictionaryPage)
+                if(dictionaryModel.state === 0)
+                    dictionaryModel.translate()
+                else
+                    if(dictionaryModel.state === 2)
+                        swipeView.setCurrentIndex(kSaveDictionaryPage)
+
             }
         }
     }
-
-    //Rectangle{
-    //    color: "green"
-    //    anchors.fill: navigationButtons
-    //}
 
     ListView {
         id: dictionaryListView

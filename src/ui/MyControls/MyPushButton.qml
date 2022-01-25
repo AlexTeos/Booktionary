@@ -2,20 +2,43 @@ import QtQuick 2.11
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
-Button {
+MouseArea {
     property color backgroundColor
     property real buttonRadius
+    property string text
+    property real fontSize
+    property string animatedIcon
 
     id: control
     hoverEnabled: false
-    height: control.font.pixelSize * 2
+    height: fontSize * 2
 
-    contentItem: Text {
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
+    Rectangle {
+        id: control_rectangle
+        anchors.centerIn: control
+
+        height: control.height * 0.9
+        width: control.width * 0.95
+
+        anchors.horizontalCenter: control.horizontalCenter
+        color: control.backgroundColor
+        radius: buttonRadius
+    }
+
+    Text {
+        anchors.centerIn: control
         text: control.text
-        font.pixelSize: control.font.pixelSize
+        font.pixelSize: control.fontSize
         color: "white"
+        visible: control.text !== ""
+    }
+
+    AnimatedImage {
+        anchors.centerIn: control
+        height: parent.height
+        fillMode: Image.PreserveAspectFit
+        visible: control.animatedIcon !== ""
+        source: control.animatedIcon === "" ? "" : "../" + control.animatedIcon
     }
 
     function animate(){
@@ -32,17 +55,5 @@ Button {
            {
                control_rectangle.color = backgroundColor
            }
-    }
-
-    background: Rectangle {
-        id: control_rectangle
-        anchors.centerIn: control
-
-        height: control.height * 0.9
-        width: control.width * 0.95
-
-        anchors.horizontalCenter: control.horizontalCenter
-        color: control.backgroundColor
-        radius: buttonRadius
     }
 }

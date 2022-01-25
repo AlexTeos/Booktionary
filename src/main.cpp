@@ -9,17 +9,23 @@
 #include "outputgenerator.h"
 #include "translator.h"
 
+const QString ApiKeyFileName = "yandexDictionaryKey.txt";
+
 int main(int argc, char* argv[])
 {
     QGuiApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
-    DictionaryModel       dictionaryModel;
+    Translator            translator;
+    translator.initialize(ApiKeyFileName);
+    DictionaryModel dictionaryModel;
+    dictionaryModel.setTranslator(&translator);
+    InputParser     inputParser(&dictionaryModel);
+    OutputGenerator outputGenerator(&dictionaryModel);
 
     engine.rootContext()->setContextProperty("dictionaryModel", &dictionaryModel);
-
-    InputParser inputParser(&dictionaryModel);
     engine.rootContext()->setContextProperty("inputParser", &inputParser);
+    engine.rootContext()->setContextProperty("outputGenerator", &outputGenerator);
 
     engine.load(QUrl(QStringLiteral("qrc:/Main.qml")));
 

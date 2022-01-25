@@ -2,10 +2,11 @@
     <qresource prefix="/">
         <file>AppSettings.qml</file>
         <file>Start.qml</file>
-        <file>MyControls/MyPushButton.qml</file>
         <file>qmldir</file>
         <file>Main.qml</file>
         <file>Dictionary.qml</file>
         <file>SaveDictionary.qml</file>
+        <file>res/wait.gif</file>
+        <file>MyControls/MyPushButton.qml</file>
     </qresource>
 </RCC>

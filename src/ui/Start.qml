@@ -39,7 +39,7 @@ Page {
             backgroundColor: AppSettings.blueLightColor
             buttonRadius: AppSettings.standartRadius
             text: qsTr("Choose file...")
-            font.pixelSize: AppSettings.fontSize_6
+            fontSize: AppSettings.fontSize_6
             onClicked: {
                 animate()
                 fileDialog.visible = true
