@@ -14,4 +14,5 @@ private slots:
 
 private:
     OutputGenerator m_outputGenerator;
+    DictionaryModel m_dictionary;
 };

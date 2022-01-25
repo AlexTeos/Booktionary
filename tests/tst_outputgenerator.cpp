@@ -2,7 +2,10 @@
 
 #include "../src/dictionarymodel.h"
 
-void TestOutputGenerator::initTestCase() {}
+void TestOutputGenerator::initTestCase()
+{
+    m_outputGenerator.setDictionaryModel(&m_dictionary);
+}
 
 void TestOutputGenerator::cleanupTestCase() {}
 
@@ -91,7 +94,7 @@ void TestOutputGenerator::testGenerateOutput()
         dictionary.addWord(word);
     }
 
-    QVERIFY(m_outputGenerator.generateOutput(dictionary, "testDictionary.dict"));
+    QVERIFY(m_outputGenerator.generateOutput("testDictionary.dict"));
 
     QFile::remove("testDictionary.dict");
 }

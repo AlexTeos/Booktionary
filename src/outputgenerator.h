@@ -1,14 +1,23 @@
 #ifndef OUTPUTGENERATOR_H
 #define OUTPUTGENERATOR_H
 
+#include <QObject>
+
 #include "dictionarymodel.h"
 
-class OutputGenerator
+class OutputGenerator : public QObject
 {
+    Q_OBJECT
 public:
-    OutputGenerator();
+    explicit OutputGenerator();
+    explicit OutputGenerator(DictionaryModel* dictiomaryModel);
+    void setDictionaryModel(DictionaryModel* newDictionaryModel);
 
-    bool generateOutput(const DictionaryModel& dictionary, const QString& outputFileName);
+public slots:
+    bool generateOutput(const QString& outputFileName);
+
+private:
+    DictionaryModel* m_dictionaryModel;
 };
 
 #endif // OUTPUTGENERATOR_H

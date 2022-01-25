@@ -8,29 +8,39 @@
 // "word";"перевод";"example";"перевод"
 // "word";"transcription";"перевод";"example";"перевод"
 
-OutputGenerator::OutputGenerator() {}
+OutputGenerator::OutputGenerator() : m_dictionaryModel(nullptr) {}
 
-bool OutputGenerator::generateOutput(const DictionaryModel& dictionary, const QString& outputFileName)
+OutputGenerator::OutputGenerator(DictionaryModel* dictiomaryModel) : m_dictionaryModel(dictiomaryModel) {}
+
+void OutputGenerator::setDictionaryModel(DictionaryModel* newDictionaryModel)
 {
-    QFile outputFile(outputFileName);
-    if (outputFile.open(QIODevice::WriteOnly))
+    m_dictionaryModel = newDictionaryModel;
+}
+
+bool OutputGenerator::generateOutput(const QString& outputFileName)
+{
+    if (m_dictionaryModel != nullptr)
     {
-        for (const auto& word : dictionary)
+        QFile outputFile(outputFileName.last(outputFileName.length() - 8));
+        if (outputFile.open(QIODevice::WriteOnly))
         {
-            foreach(Definition definition, word)
+            for (const auto& word : *m_dictionaryModel)
             {
-                QString wordLine = "\"" + word.getWord() + "\";\"" + definition.meaning.join(",") + "\"";
+                foreach(Definition definition, word)
+                {
+                    QString wordLine = "\"" + word.getWord() + "\";\"" + definition.meaning.join(",") + "\"";
 
-                foreach(OriginalAndTranslation example, definition) wordLine +=
-                    (";\"" + example.first + "\";\"" + example.second + "\"");
+                    foreach(OriginalAndTranslation example, definition) wordLine +=
+                        (";\"" + example.first + "\";\"" + example.second + "\"");
 
-                wordLine += "\n";
-                outputFile.write(wordLine.toUtf8());
+                    wordLine += "\n";
+                    outputFile.write(wordLine.toUtf8());
+                }
             }
-        }
 
-        outputFile.close();
-        return true;
+            outputFile.close();
+            return true;
+        }
     }
 
     return false;
