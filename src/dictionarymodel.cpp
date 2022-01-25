@@ -1,6 +1,9 @@
 #include "dictionarymodel.h"
 
-DictionaryModel::DictionaryModel(QObject* parent) : QAbstractListModel(parent) {}
+DictionaryModel::DictionaryModel(QObject* parent)
+    : QAbstractListModel(parent), m_state(DictionaryModelState::Untranslated)
+{
+}
 
 int DictionaryModel::rowCount(const QModelIndex& parent) const
 {
@@ -83,20 +86,25 @@ QHash<int, QByteArray> DictionaryModel::roleNames() const
     return names;
 }
 
-bool DictionaryModel::translate(Translator& translator)
+bool DictionaryModel::translate()
 {
+    m_state = DictionaryModelState::Processed;
+    emit stateChanged();
+
     int i = 0;
     for (auto iter = m_dictionary.begin(); iter != m_dictionary.end(); iter++, i++)
     {
-        if (not translator.translate(*iter))
+        if (not m_translator->translate(*iter))
         {
             return false;
         }
         else
         {
-            qDebug() << i << "/" << m_dictionary.size();
+            qDebug() << i + 1 << "/" << m_dictionary.size();
         }
     }
 
+    m_state = DictionaryModelState::Translated;
+    emit stateChanged();
     return true;
 }
