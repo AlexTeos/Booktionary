@@ -23,7 +23,7 @@ Item {
         anchors.left: control.left
         height: control.height
         anchors.verticalCenter: control.verticalCenter
-        width: control.width * (processed / total)
+        width: Math.max(height, control.width * (processed / total))
         color: control.color
         radius: control.radius
     }
