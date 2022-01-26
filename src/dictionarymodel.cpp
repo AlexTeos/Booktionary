@@ -1,7 +1,7 @@
 #include "dictionarymodel.h"
 
 DictionaryModel::DictionaryModel(QObject* parent)
-    : QAbstractListModel(parent), m_state(DictionaryModelState::Untranslated)
+    : QAbstractListModel(parent), m_state(DictionaryModelState::Untranslated), m_translatedCount(0)
 {
 }
 
@@ -72,6 +72,10 @@ void DictionaryModel::reset()
     beginResetModel();
     m_dictionary.clear();
     endResetModel();
+    m_state = DictionaryModelState::Untranslated;
+    emit stateChanged();
+    m_translatedCount = 0;
+    emit translatedCountChanged();
 }
 
 qsizetype DictionaryModel::size() const
@@ -89,7 +93,9 @@ QHash<int, QByteArray> DictionaryModel::roleNames() const
 bool DictionaryModel::translate()
 {
     m_state = DictionaryModelState::Processed;
-    emit stateChanged();
+    emit      stateChanged();
+    qsizetype translatedCount = 0;
+    qsizetype updateCount     = m_dictionary.size() / 100;
 
     int i = 0;
     for (auto iter = m_dictionary.begin(); iter != m_dictionary.end(); iter++, i++)
@@ -98,11 +104,18 @@ bool DictionaryModel::translate()
         {
             return false;
         }
-        else
+
+        ++translatedCount;
+        if (translatedCount >= updateCount)
         {
-            qDebug() << i + 1 << "/" << m_dictionary.size();
+            m_translatedCount += translatedCount;
+            translatedCount = 0;
+            emit translatedCountChanged();
         }
     }
+
+    m_translatedCount = m_dictionary.size();
+    emit translatedCountChanged();
 
     m_state = DictionaryModelState::Translated;
     emit stateChanged();

@@ -17,8 +17,8 @@ MouseArea {
         id: control_rectangle
         anchors.centerIn: control
 
-        height: control.height * 0.9
-        width: control.width * 0.95
+        height: control.height
+        width: control.width
 
         anchors.horizontalCenter: control.horizontalCenter
         color: control.backgroundColor

@@ -14,83 +14,95 @@ Page {
         color: AppSettings.blueSoftColor
     }
 
-    Row{
-        id: navigationButtons
-        width: parent.width
-        height: AppSettings.fontSize_4*2
-        anchors.horizontalCenter: parent.horizontalCenter
+    ColumnLayout {
+        anchors.fill: parent
+        anchors.margins: AppSettings.fontSize_1
+        spacing: AppSettings.fontSize_1
 
-        anchors.top: parent.top
-        anchors.left: parent.left
+        Row{
+            id: navigationButtons
+            Layout.fillWidth: true
+            height: AppSettings.fontSize_4*2
 
-        MyPushButton {
-            height: AppSettings.buttonSlimHeight
-            width: (parent.width) / 2 //- AppSettings.standartMargin
+            MyPushButton {
+                height: AppSettings.buttonSlimHeight
+                width: (parent.width) / 2
 
-            buttonRadius: AppSettings.standartRadius
-            backgroundColor: AppSettings.blueLightColor
-            text: qsTr("Back")
-            fontSize: parent.height/2
-            onClicked: {
-                animate()
-                swipeView.setCurrentIndex(kStartPage)
+                buttonRadius: AppSettings.standartRadius
+                backgroundColor: AppSettings.blueLightColor
+                text: qsTr("Back")
+                fontSize: parent.height/2
+                onClicked: {
+                    animate()
+                    swipeView.setCurrentIndex(kStartPage)
+                    dictionaryModel.reset()
+                }
+            }
+
+            MyPushButton {
+                height: AppSettings.buttonSlimHeight
+                width: (parent.width) / 2
+
+                buttonRadius: AppSettings.standartRadius
+                backgroundColor: AppSettings.blueLightColor
+                text: if(dictionaryModel.state === 0)
+                          qsTr("Translate")
+                       else
+                          if(dictionaryModel.state === 1)
+                            qsTr("")
+                         else
+                            qsTr("Save")
+
+                animatedIcon: if(dictionaryModel.state === 1)
+                                  "res/wait.gif"
+                               else
+                                  ""
+                fontSize: parent.height/2
+                onClicked: {
+                    animate()
+                    if(dictionaryModel.state === 0)
+                        dictionaryModel.translate()
+                    else
+                        if(dictionaryModel.state === 2)
+                            swipeView.setCurrentIndex(kSaveDictionaryPage)
+
+                }
             }
         }
 
-        MyPushButton {
-            height: AppSettings.buttonSlimHeight
-            width: (parent.width) / 2 //- AppSettings.standartMargin
-            //anchors.leftMargin: AppSettings.standartMargin
-
-            buttonRadius: AppSettings.standartRadius
-            backgroundColor: AppSettings.blueLightColor
-            text: if(dictionaryModel.state === 0)
-                      qsTr("Translate")
-                   else
-                      if(dictionaryModel.state === 1)
-                        qsTr("")
-                     else
-                        qsTr("Save")
-
-            animatedIcon: if(dictionaryModel.state === 1)
-                              "res/wait.gif"
-                           else
-                              ""
-            fontSize: parent.height/2
-            onClicked: {
-                animate()
-                if(dictionaryModel.state === 0)
-                    dictionaryModel.translate()
-                else
-                    if(dictionaryModel.state === 2)
-                        swipeView.setCurrentIndex(kSaveDictionaryPage)
-
-            }
-        }
-    }
-
-    ListView {
-        id: dictionaryListView
-        width: parent.width * 0.9
-        anchors.top: navigationButtons.bottom
-        anchors.bottom: parent.bottom
-        anchors.horizontalCenter: parent.horizontalCenter
-
-        model: dictionaryModel
-
-        spacing: AppSettings.standartSpacing
-        clip: true
-
-        delegate: Rectangle{
+        MyProgressBar {
+            id: translationProgressBar
+            height: AppSettings.fontSize_4
             radius: AppSettings.standartRadius
-            width: dictionaryListView.width
-            height: AppSettings.fontSize_4 * 2
-            color: AppSettings.blueDarkColor
-            Text {
-                anchors.centerIn: parent
-                font.pixelSize: parent.height / 2
-                color: AppSettings.whiteColor
-                text: word
+            visible: dictionaryModel.state === 1
+            Layout.fillWidth: true
+            color:"green"
+            backgroundColor:"black"
+            total: dictionaryListView.count
+            processed: dictionaryModel.translatedCount
+        }
+
+        ListView {
+            id: dictionaryListView
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            model: dictionaryModel
+
+            spacing: AppSettings.standartSpacing
+            clip: true
+
+            delegate: Rectangle{
+                radius: AppSettings.standartRadius
+                width: dictionaryListView.width
+                height: AppSettings.fontSize_4 * 2
+                color: AppSettings.blueDarkColor
+                Text {
+                    anchors.centerIn: parent
+                    font.pixelSize: parent.height / 2
+                    color: AppSettings.whiteColor
+                    text: word
+                }
             }
         }
     }

@@ -17,10 +17,10 @@ class DictionaryModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY(DictionaryModelState state READ state NOTIFY stateChanged)
+    Q_PROPERTY(double translatedCount READ translatedCount NOTIFY translatedCountChanged)
 public:
     explicit DictionaryModel(QObject* parent = nullptr);
     void      addWord(Word word);
-    void      reset();
     qsizetype size() const;
     void      setTranslator(Translator* translator) { m_translator = translator; }
 
@@ -53,17 +53,21 @@ public:
     virtual QHash<int, QByteArray> roleNames() const override;
 
     DictionaryModelState state() const { return m_state; }
+    double               translatedCount() const { return m_translatedCount; }
 
 public slots:
     bool translate();
+    void reset();
 
 signals:
     void stateChanged();
+    void translatedCountChanged();
 
 private:
     DictionaryModelState m_state;
     QList<Word>          m_dictionary;
     Translator*          m_translator;
+    qsizetype            m_translatedCount;
 };
 
 #endif // DICTIONARYMODEL_H
