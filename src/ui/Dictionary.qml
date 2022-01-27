@@ -45,26 +45,17 @@ Page {
 
                 buttonRadius: AppSettings.standartRadius
                 backgroundColor: AppSettings.blueLightColor
-                text: if(dictionaryModel.state === 0)
-                          qsTr("Translate")
-                       else
-                          if(dictionaryModel.state === 1)
-                            qsTr("")
-                         else
-                            qsTr("Save")
+                text:      if(dictionaryModel.state === 0) qsTr("Translate")
+                      else if(dictionaryModel.state === 1) qsTr("")
+                      else qsTr("Save")
 
-                animatedIcon: if(dictionaryModel.state === 1)
-                                  "res/wait.gif"
-                               else
-                                  ""
+                animatedIcon: if(dictionaryModel.state === 1) "res/wait.gif"
+                              else ""
                 fontSize: parent.height/2
                 onClicked: {
                     animate()
-                    if(dictionaryModel.state === 0)
-                        dictionaryModel.translate()
-                    else
-                        if(dictionaryModel.state === 2)
-                            swipeView.setCurrentIndex(kSaveDictionaryPage)
+                         if(dictionaryModel.state === 0) dictionaryModel.translate()
+                    else if(dictionaryModel.state === 2) swipeView.setCurrentIndex(kSaveDictionaryPage)
 
                 }
             }
@@ -102,6 +93,19 @@ Page {
                     font.pixelSize: parent.height / 2
                     color: AppSettings.whiteColor
                     text: word
+                }
+
+                Rectangle{
+                    anchors.margins: AppSettings.fontSize_1
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    radius: AppSettings.fontSize_2
+                    width: radius
+                    height: radius
+                    visible: dictionaryModel.state !== 0
+                    color:       if(translationState === 0) "yellow"
+                            else if(translationState === 1) "green"
+                            else "red"
                 }
             }
         }

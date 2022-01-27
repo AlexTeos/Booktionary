@@ -2,10 +2,20 @@
 
 void Word::addDefinition(const PartOfSpeach& PartOfSpeach, const Definition& definition)
 {
-    if (not definitions.contains(PartOfSpeach)) definitions.insert(PartOfSpeach, definition);
+    if (not m_definitions.contains(PartOfSpeach)) m_definitions.insert(PartOfSpeach, definition);
 }
 
-QString Word::getWord() const
+QString Word::word() const
 {
-    return word;
+    return m_word;
+}
+
+void Word::setState(WordState::WordState newState)
+{
+    m_state = newState;
+}
+
+WordState::WordState Word::state() const
+{
+    return m_state;
 }

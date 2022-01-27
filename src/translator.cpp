@@ -91,6 +91,8 @@ bool Translator::parseResultAndFillWord(const QByteArray& reply, Word& word)
         word.addDefinition(localPOStoWordPOS(partofspch), definition);
     }
 
+    word.setState(partOfSpeaches.size() ? WordState::Translated : WordState::TranslationNotFound);
+
     return true;
 }
 
@@ -107,7 +109,7 @@ bool Translator::getTranslation(QByteArray& reply, const Word& word)
     request.setSslConfiguration(config);
     request.setUrl(QUrl("https://dictionary.yandex.net/api/v1/dicservice.json/"
                         "lookup?key=" +
-                        apiKey + "&lang=en-ru&text=" + word.getWord()));
+                        apiKey + "&lang=en-ru&text=" + word.word()));
     request.setHeader(QNetworkRequest::ServerHeader, "application/json");
 
     QEventLoop loop;

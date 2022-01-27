@@ -6,17 +6,20 @@
 #include "translator.h"
 #include "word.h"
 
+namespace DictionaryModelState
+{
 enum DictionaryModelState
 {
     Untranslated = 0,
     Processed,
     Translated
 };
+}
 
 class DictionaryModel : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY(DictionaryModelState state READ state NOTIFY stateChanged)
+    Q_PROPERTY(DictionaryModelState::DictionaryModelState state READ state NOTIFY stateChanged)
     Q_PROPERTY(double translatedCount READ translatedCount NOTIFY translatedCountChanged)
 public:
     explicit DictionaryModel(QObject* parent = nullptr);
@@ -47,13 +50,14 @@ public:
 
     enum DictionaryRoles
     {
-        WordRole = Qt::UserRole + 1
+        WordRole = Qt::UserRole + 1,
+        StateRole
     };
 
     virtual QHash<int, QByteArray> roleNames() const override;
 
-    DictionaryModelState state() const { return m_state; }
-    double               translatedCount() const { return m_translatedCount; }
+    DictionaryModelState::DictionaryModelState state() const { return m_state; }
+    double                                     translatedCount() const { return m_translatedCount; }
 
 public slots:
     bool translate();
@@ -64,10 +68,10 @@ signals:
     void translatedCountChanged();
 
 private:
-    DictionaryModelState m_state;
-    QList<Word>          m_dictionary;
-    Translator*          m_translator;
-    qsizetype            m_translatedCount;
+    DictionaryModelState::DictionaryModelState m_state;
+    QList<Word>                                m_dictionary;
+    Translator*                                m_translator;
+    qsizetype                                  m_translatedCount;
 };
 
 #endif // DICTIONARYMODEL_H

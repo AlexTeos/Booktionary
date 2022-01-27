@@ -91,7 +91,7 @@ bool isEqual(const DictionaryModel& dictionary, QList<QString> list)
 
     for (const auto& word : dictionary)
     {
-        auto index = list.indexOf(word.getWord());
+        auto index = list.indexOf(word.word());
         if (index == -1)
             return false;
         else

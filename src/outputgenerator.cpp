@@ -28,7 +28,7 @@ bool OutputGenerator::generateOutput(const QString& outputFileName)
             {
                 foreach(Definition definition, word)
                 {
-                    QString wordLine = "\"" + word.getWord() + "\";\"" + definition.meaning.join(",") + "\"";
+                    QString wordLine = "\"" + word.word() + "\";\"" + definition.meaning.join(",") + "\"";
 
                     foreach(OriginalAndTranslation example, definition) wordLine +=
                         (";\"" + example.first + "\";\"" + example.second + "\"");

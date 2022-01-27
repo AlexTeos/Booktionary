@@ -6,6 +6,16 @@
 #include <QPair>
 #include <QVector>
 
+namespace WordState
+{
+enum WordState
+{
+    Untranslated = 0,
+    Translated,
+    TranslationNotFound
+};
+}
+
 enum PartOfSpeach
 {
     Unknown = 0,
@@ -37,19 +47,24 @@ struct Definition
 class Word
 {
 public:
-    Word(const QString& _word) : word(_word) {}
+    Word(const QString& word) : m_word(word), m_state(WordState::Untranslated) {}
 
     typedef QMultiMap<PartOfSpeach, Definition> Definitions;
-    void    addDefinition(const PartOfSpeach& PartOfSpeach, const Definition& definition);
-    QString getWord() const;
+    void addDefinition(const PartOfSpeach& PartOfSpeach, const Definition& definition);
 
     using const_iterator = Definitions::const_iterator;
-    const_iterator begin() const { return definitions.cbegin(); }
-    const_iterator end() const { return definitions.cend(); }
+    const_iterator begin() const { return m_definitions.cbegin(); }
+    const_iterator end() const { return m_definitions.cend(); }
+
+    WordState::WordState state() const;
+    QString              word() const;
+
+    void setState(WordState::WordState newState);
 
 private:
-    Definitions definitions;
-    QString     word;
+    Definitions          m_definitions;
+    QString              m_word;
+    WordState::WordState m_state;
 };
 
 #endif // WORD_H
