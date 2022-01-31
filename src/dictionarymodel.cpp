@@ -12,22 +12,6 @@ int DictionaryModel::rowCount(const QModelIndex& parent) const
     return m_dictionary.size();
 }
 
-//bool DictionaryModel::hasChildren(const QModelIndex& parent) const
-//{
-//    // FIXME: Implement me!
-//}
-
-//bool DictionaryModel::canFetchMore(const QModelIndex& parent) const
-//{
-//    // FIXME: Implement me!
-//    return false;
-//}
-
-//void DictionaryModel::fetchMore(const QModelIndex& parent)
-//{
-//    // FIXME: Implement me!
-//}
-
 QVariant DictionaryModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid()) return QVariant();
@@ -43,22 +27,11 @@ QVariant DictionaryModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-//bool DictionaryModel::setData(const QModelIndex& index, const QVariant& value, int role)
-//{
-//    if (data(index, role) != value)
-//    {
-//        // FIXME: Implement me!
-//        emit dataChanged(index, index, QVector<int>() << role);
-//        return true;
-//    }
-//    return false;
-//}
-
 Qt::ItemFlags DictionaryModel::flags(const QModelIndex& index) const
 {
     if (!index.isValid()) return Qt::NoItemFlags;
 
-    return Qt::ItemIsEditable; // FIXME: Implement me!
+    return Qt::ItemIsEditable;
 }
 
 void DictionaryModel::addWord(Word word)
