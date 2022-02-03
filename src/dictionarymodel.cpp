@@ -22,6 +22,8 @@ QVariant DictionaryModel::data(const QModelIndex& index, int role) const
             return QVariant(m_dictionary[index.row()].word());
         case StateRole:
             return QVariant(m_dictionary[index.row()].state());
+        case MeaningsRole:
+            return QVariant(m_dictionary[index.row()].meanings());
     }
 
     return QVariant();
@@ -61,8 +63,9 @@ qsizetype DictionaryModel::size() const
 QHash<int, QByteArray> DictionaryModel::roleNames() const
 {
     QHash<int, QByteArray> names;
-    names[WordRole]  = "word";
-    names[StateRole] = "translationState";
+    names[WordRole]     = "word";
+    names[StateRole]    = "translationState";
+    names[MeaningsRole] = "meanings";
     return names;
 }
 
@@ -81,7 +84,7 @@ bool DictionaryModel::translate()
         {
             return false;
         }
-        emit dataChanged(index(modelCounter), index(modelCounter), QVector<int>() << StateRole << WordRole);
+        emit dataChanged(index(modelCounter), index(modelCounter), QVector<int>() << StateRole << MeaningsRole);
 
         ++translatedCount;
         if (translatedCount >= updateCount)

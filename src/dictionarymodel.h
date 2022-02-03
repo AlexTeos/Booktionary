@@ -42,7 +42,8 @@ public:
     enum DictionaryRoles
     {
         WordRole = Qt::UserRole + 1,
-        StateRole
+        StateRole,
+        MeaningsRole
     };
 
     virtual QHash<int, QByteArray> roleNames() const override;

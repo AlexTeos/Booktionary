@@ -83,31 +83,48 @@ Page {
             spacing: AppSettings.standartSpacing
             clip: true
 
-            delegate: Rectangle{
-                radius: AppSettings.standartRadius
-                width: dictionaryListView.width
-                height: AppSettings.fontSize_4 * 2
-                color: AppSettings.blueDarkColor
-                Text {
-                    anchors.centerIn: parent
-                    font.pixelSize: parent.height / 2
-                    color: AppSettings.whiteColor
-                    text: word
-                }
+            delegate:
+                Rectangle {
+                    height: delegateColumn.height
+                    width: delegateColumn.width
+                    radius: AppSettings.standartRadius
+                    color: AppSettings.blueDarkColor
+                    z:-1
 
-                Rectangle{
-                    anchors.margins: AppSettings.fontSize_1
-                    anchors.right: parent.right
-                    anchors.top: parent.top
-                    radius: AppSettings.fontSize_2
-                    width: radius
-                    height: radius
-                    visible: dictionaryModel.state !== 0
-                    color:       if(translationState === 0) "yellow"
-                            else if(translationState === 1) "green"
-                            else "red"
+                    Column {
+                        id: delegateColumn
+                        width: dictionaryListView.width
+                        spacing: AppSettings.fontSize_1
+                        padding: AppSettings.fontSize_1
+                        Text {
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            font.pixelSize: AppSettings.fontSize_4
+                            color: AppSettings.whiteColor
+                            text: word
+                        }
+                        Text {
+                            font.pixelSize: AppSettings.fontSize_2
+                            color: AppSettings.whiteColor
+                            text: meanings.join("\n")
+                            wrapMode: Text.WordWrap
+                            width: parent.width - parent.padding * 2
+                            visible: meanings.length > 0
+                        }
+                    }
+
+                    Rectangle {
+                        anchors.margins: AppSettings.fontSize_1
+                        anchors.right: parent.right
+                        anchors.top: parent.top
+                        radius: AppSettings.fontSize_2
+                        width: radius
+                        height: radius
+                        visible: dictionaryModel.state !== 0
+                        color:       if(translationState === 0) "yellow"
+                                else if(translationState === 1) "green"
+                                else "red"
+                    }
                 }
-            }
         }
     }
 }

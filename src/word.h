@@ -31,6 +31,18 @@ enum PartOfSpeach
     Participle
 };
 
+const QString PartOfSpeachumToQString[11] = {"Unknown",
+                                             "Verb",
+                                             "Noun",
+                                             "Adjective",
+                                             "Determiner",
+                                             "Adverb",
+                                             "Pronoun",
+                                             "Preposition",
+                                             "Conjunction",
+                                             "Interjection",
+                                             "Participle"};
+
 typedef QPair<QString, QString>         OriginalAndTranslation;
 typedef QVector<OriginalAndTranslation> OriginalAndTranslationList;
 
@@ -58,6 +70,7 @@ public:
 
     WordState::WordState state() const;
     QString              word() const;
+    QStringList          meanings() const;
 
     void setState(WordState::WordState newState);
 
