@@ -17,7 +17,9 @@ void OutputGenerator::setDictionaryModel(DictionaryModel* newDictionaryModel)
     m_dictionaryModel = newDictionaryModel;
 }
 
-bool OutputGenerator::generateOutput(const QString& outputFileName)
+bool OutputGenerator::generateOutput(const QString& outputFileName,
+                                     const bool&    mostFrequentMeaning,
+                                     const bool&    onlyWithExamples)
 {
     if (m_dictionaryModel != nullptr)
     {
@@ -28,6 +30,8 @@ bool OutputGenerator::generateOutput(const QString& outputFileName)
             {
                 foreach(Definition definition, word)
                 {
+                    if (onlyWithExamples && not definition.examples.count()) continue;
+
                     QString wordLine = "\"" + word.word() + "\";\"" + definition.meaning.join(",") + "\"";
 
                     foreach(OriginalAndTranslation example, definition) wordLine +=
@@ -35,6 +39,8 @@ bool OutputGenerator::generateOutput(const QString& outputFileName)
 
                     wordLine += "\n";
                     outputFile.write(wordLine.toUtf8());
+
+                    if (mostFrequentMeaning) break;
                 }
             }
 

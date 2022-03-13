@@ -19,11 +19,25 @@ Page {
 
         spacing: AppSettings.fontSize_6
 
+        MyCheckBox {
+            id: saveMostPopularMeaningCheckBox
+            checkColor: AppSettings.blueLightColor
+            text: "The most used meaning"
+            font.pixelSize: AppSettings.fontSize_4
+        }
+
+        MyCheckBox {
+            id: saveWordsOnlyWithExamplesCheckBox
+            checkColor: AppSettings.blueLightColor
+            text: "Only words with examples"
+            font.pixelSize: AppSettings.fontSize_4
+        }
+
         Text {
             anchors.horizontalCenter: parent.horizontalCenter
 
             text: qsTr("Save dictionary to")
-            font.pixelSize: AppSettings.fontSize_6
+            font.pixelSize: AppSettings.fontSize_5
         }
 
         MyPushButton {
@@ -35,7 +49,7 @@ Page {
 
             buttonRadius: AppSettings.standartRadius
             text: qsTr("Choose file...")
-            fontSize: AppSettings.fontSize_6
+            fontSize: AppSettings.fontSize_5
             onClicked: {
                 animate()
                 fileDialog.visible = true
@@ -49,7 +63,7 @@ Page {
         fileMode: FileDialog.SaveFile
         onAccepted: {
             console.log("You chose: " + fileDialog.currentFile)
-            if(outputGenerator.generateOutput(fileDialog.currentFile))
+            if(outputGenerator.generateOutput(fileDialog.currentFile, saveMostPopularMeaningCheckBox.checked, saveWordsOnlyWithExamplesCheckBox.checked))
                 swipeView.setCurrentIndex(kDictionaryPage)
         }
         onRejected: {

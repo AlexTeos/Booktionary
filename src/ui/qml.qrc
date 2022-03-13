@@ -9,5 +9,6 @@
         <file>res/wait.gif</file>
         <file>MyControls/MyPushButton.qml</file>
         <file>MyControls/MyProgressBar.qml</file>
+        <file>MyControls/MyCheckBox.qml</file>
     </qresource>
 </RCC>

@@ -14,7 +14,9 @@ public:
     void setDictionaryModel(DictionaryModel* newDictionaryModel);
 
 public slots:
-    bool generateOutput(const QString& outputFileName);
+    bool generateOutput(const QString& outputFileName,
+                        const bool&    mostFrequentMeaning = false,
+                        const bool&    onlyWithExamples    = false);
 
 private:
     DictionaryModel* m_dictionaryModel;

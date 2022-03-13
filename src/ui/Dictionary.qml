@@ -23,10 +23,11 @@ Page {
             id: navigationButtons
             Layout.fillWidth: true
             height: AppSettings.fontSize_4*2
+            spacing: AppSettings.fontSize_1
 
             MyPushButton {
                 height: AppSettings.buttonSlimHeight
-                width: (parent.width) / 2
+                width: (parent.width - parent.spacing) / 2
 
                 buttonRadius: AppSettings.standartRadius
                 backgroundColor: AppSettings.blueLightColor
@@ -41,7 +42,7 @@ Page {
 
             MyPushButton {
                 height: AppSettings.buttonSlimHeight
-                width: (parent.width) / 2
+                width: (parent.width - parent.spacing) / 2
 
                 buttonRadius: AppSettings.standartRadius
                 backgroundColor: AppSettings.blueLightColor

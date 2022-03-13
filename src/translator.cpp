@@ -119,7 +119,9 @@ bool Translator::getTranslation(QByteArray& reply, const Word& word)
     loop.exec();
 
     reply = _reply->readAll();
-    delete manager;
+
+    _reply->deleteLater();
+    manager->deleteLater();
 
     return true;
 }
