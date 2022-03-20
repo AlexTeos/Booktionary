@@ -72,31 +72,26 @@ QHash<int, QByteArray> DictionaryModel::roleNames() const
 bool DictionaryModel::translate()
 {
     m_state = DictionaryModelState::Processed;
-    emit      stateChanged();
-    qsizetype translatedCount = 0;
-    qsizetype updateCount     = m_dictionary.size() / 100;
+    emit stateChanged();
+    // TODO: calculate count of words dynamically
+    qsizetype updateCount = qMin(512, m_dictionary.size());
 
-    int i            = 0;
     int modelCounter = 0;
-    for (auto iter = m_dictionary.begin(); iter != m_dictionary.end(); ++iter, ++i, ++modelCounter)
+    for (auto iter = m_dictionary.begin(); iter != m_dictionary.end(); iter += updateCount, modelCounter += updateCount)
     {
-        if (not m_translator->translate(*iter))
+        updateCount = qMin(m_dictionary.size() - modelCounter, updateCount);
+
+        if (not m_translator->translateNMT(iter, updateCount))
         {
             return false;
         }
-        emit dataChanged(index(modelCounter), index(modelCounter), QVector<int>() << StateRole << MeaningsRole);
 
-        ++translatedCount;
-        if (translatedCount >= updateCount)
-        {
-            m_translatedCount += translatedCount;
-            translatedCount = 0;
-            emit translatedCountChanged();
-        }
+        emit dataChanged(
+            index(modelCounter), index(modelCounter + updateCount - 1), QVector<int>() << StateRole << MeaningsRole);
+
+        m_translatedCount += updateCount;
+        emit translatedCountChanged();
     }
-
-    m_translatedCount = m_dictionary.size();
-    emit translatedCountChanged();
 
     m_state = DictionaryModelState::Translated;
     emit stateChanged();

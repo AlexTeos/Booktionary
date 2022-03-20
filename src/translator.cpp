@@ -5,8 +5,9 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include <future>
+#include <thread>
 
 Translator::Translator() {}
 
@@ -19,8 +20,9 @@ bool Translator::initialize(const QString& keyFileName)
 {
     if (loadKey(keyFileName, apiKey))
     {
-        QByteArray tmp;
-        if (getTranslation(tmp, Word("the")))
+        QScopedPointer<QNetworkAccessManager> threadNetworkManager(new QNetworkAccessManager());
+        QByteArray                            tmp;
+        if (getTranslation(tmp, Word("the"), threadNetworkManager.get()))
         {
             state = TranslatorState::Initialized;
             return true;
@@ -96,13 +98,12 @@ bool Translator::parseResultAndFillWord(const QByteArray& reply, Word& word)
     return true;
 }
 
-bool Translator::getTranslation(QByteArray& reply, const Word& word)
+bool Translator::getTranslation(QByteArray& reply, const Word& word, QNetworkAccessManager* networkManager)
 {
     if (state != TranslatorState::Initialized) return false;
 
-    QNetworkAccessManager* manager = new QNetworkAccessManager();
-    QNetworkRequest        request;
-    QNetworkReply*         _reply = NULL;
+    QNetworkRequest request;
+    QNetworkReply*  _reply = NULL;
 
     QSslConfiguration config = QSslConfiguration::defaultConfiguration();
     config.setProtocol(QSsl::TlsV1_2);
@@ -113,7 +114,7 @@ bool Translator::getTranslation(QByteArray& reply, const Word& word)
     request.setHeader(QNetworkRequest::ServerHeader, "application/json");
 
     QEventLoop loop;
-    _reply = manager->get(request);
+    _reply = networkManager->get(request);
     QObject::connect(_reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
 
     loop.exec();
@@ -121,7 +122,6 @@ bool Translator::getTranslation(QByteArray& reply, const Word& word)
     reply = _reply->readAll();
 
     _reply->deleteLater();
-    manager->deleteLater();
 
     return true;
 }
@@ -142,10 +142,55 @@ bool Translator::loadKey(const QString& keyFileName, QString Key)
     return false;
 }
 
-bool Translator::translate(Word& word)
+bool Translator::translate(Word& word, QNetworkAccessManager* networkManager)
 {
     QByteArray translation;
-    if (not getTranslation(translation, word)) return false;
+    if (networkManager == nullptr)
+    {
+        QScopedPointer<QNetworkAccessManager> localNetworkManager(new QNetworkAccessManager());
+        if (not getTranslation(translation, word, localNetworkManager.get())) return false;
+    }
+    else
+    {
+        if (not getTranslation(translation, word, networkManager)) return false;
+    }
+
     if (not parseResultAndFillWord(translation, word)) return false;
     return true;
+}
+
+bool Translator::translateN(QList<Word>::iterator iter, qsizetype n)
+{
+    bool res = true;
+
+    QScopedPointer<QNetworkAccessManager> threadNetworkManager(new QNetworkAccessManager());
+    for (qsizetype i = 0; i < n; ++i, ++iter)
+    {
+        res &= translate(*iter, threadNetworkManager.get());
+    }
+
+    return res;
+}
+
+bool Translator::translateNMT(QList<Word>::iterator iter, qsizetype n)
+{
+    // TODO: use QFuture
+    qint16    threadCount    = std::thread::hardware_concurrency() * 4;
+    qsizetype wordsPerThread = n >= threadCount ? n / threadCount : n;
+
+    std::vector<std::future<bool>> results;
+    for (qsizetype i = 0; i < n; iter += wordsPerThread, i += wordsPerThread)
+    {
+        wordsPerThread = qMin(n - i, wordsPerThread);
+
+        results.push_back(std::async(&Translator::translateN, this, iter, wordsPerThread));
+    }
+
+    bool res = true;
+    for (auto& result : results)
+    {
+        res &= result.get();
+    }
+
+    return res;
 }

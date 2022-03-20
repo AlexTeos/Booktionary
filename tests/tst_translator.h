@@ -11,6 +11,7 @@ private slots:
     void initTestCase();
     void cleanupTestCase();
     void testTranslate();
+    void testTranslateN();
 
 private:
     Translator m_translator;
