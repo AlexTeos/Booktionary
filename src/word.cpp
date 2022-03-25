@@ -18,7 +18,7 @@ QStringList Word::meanings() const
     while (i.hasNext())
     {
         i.next();
-        out.push_back(PartOfSpeachumToQString[i.key()] + ": " + i.value().meaning.join(", "));
+        out.push_back(PartOfSpeachumToQString[i.key()] + ": " + i.value().m_meaning.join(", "));
     }
     return out;
 }

@@ -372,7 +372,7 @@ void TestTranslator::testTranslate()
         QVERIFY(m_translator.translate(w));
     }
 }
-#include <QTimer>
+
 void TestTranslator::testTranslateN()
 {
     QList<Word> dictionary;

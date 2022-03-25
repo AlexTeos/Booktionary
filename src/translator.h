@@ -28,8 +28,8 @@ private:
     bool getTranslation(QByteArray& reply, const Word& word, QNetworkAccessManager* networkManager);
     bool loadKey(const QString& keyFileName, QString Key);
 
-    QString         apiKey;
-    TranslatorState state;
+    QString         m_apiKey;
+    TranslatorState m_state;
 };
 
 #endif // TRANSLATOR_H

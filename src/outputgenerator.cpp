@@ -30,9 +30,9 @@ bool OutputGenerator::generateOutput(const QString& outputFileName,
             {
                 foreach(Definition definition, word)
                 {
-                    if (onlyWithExamples && not definition.examples.count()) continue;
+                    if (onlyWithExamples && not definition.m_examples.count()) continue;
 
-                    QString wordLine = "\"" + word.word() + "\";\"" + definition.meaning.join(",") + "\"";
+                    QString wordLine = "\"" + word.word() + "\";\"" + definition.m_meanings.join(",") + "\"";
 
                     foreach(OriginalAndTranslation example, definition) wordLine +=
                         (";\"" + example.first + "\";\"" + example.second + "\"");

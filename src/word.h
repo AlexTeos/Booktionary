@@ -49,11 +49,11 @@ typedef QVector<OriginalAndTranslation> OriginalAndTranslationList;
 struct Definition
 {
     using const_iterator = OriginalAndTranslationList::const_iterator;
-    const_iterator begin() const { return examples.cbegin(); }
-    const_iterator end() const { return examples.cend(); }
+    const_iterator begin() const { return m_examples.cbegin(); }
+    const_iterator end() const { return m_examples.cend(); }
 
-    OriginalAndTranslationList examples;
-    QStringList                meaning;
+    OriginalAndTranslationList m_examples;
+    QStringList                m_meanings;
 };
 
 class Word

@@ -11,25 +11,25 @@
 
 Translator::Translator() {}
 
-Translator::Translator(const QString& keyFileName) : state(TranslatorState::Uninitialized)
+Translator::Translator(const QString& keyFileName) : m_state(TranslatorState::Uninitialized)
 {
     initialize(keyFileName);
 }
 
 bool Translator::initialize(const QString& keyFileName)
 {
-    if (loadKey(keyFileName, apiKey))
+    if (loadKey(keyFileName, m_apiKey))
     {
         QScopedPointer<QNetworkAccessManager> threadNetworkManager(new QNetworkAccessManager());
         QByteArray                            tmp;
         if (getTranslation(tmp, Word("the"), threadNetworkManager.get()))
         {
-            state = TranslatorState::Initialized;
+            m_state = TranslatorState::Initialized;
             return true;
         }
     }
 
-    state = TranslatorState::InitializationError;
+    m_state = TranslatorState::InitializationError;
     return false;
 }
 
@@ -73,7 +73,7 @@ bool Translator::parseResultAndFillWord(const QByteArray& reply, Word& word)
         Definition definition;
         foreach(QJsonValueRef translation, translations)
         {
-            definition.meaning.push_back(translation.toObject().take("text").toString());
+            definition.m_meanings.push_back(translation.toObject().take("text").toString());
 
             QJsonArray examples = translation.toObject().take("ex").toArray();
 
@@ -86,7 +86,7 @@ bool Translator::parseResultAndFillWord(const QByteArray& reply, Word& word)
                 foreach(QJsonValueRef exampleTranslation, exampleTranslationArray)
                 {
                     exampleTranslationText += exampleTranslation.toObject().take("text").toString();
-                    definition.examples.push_back(OriginalAndTranslation(exampleText, exampleTranslationText));
+                    definition.m_examples.push_back(OriginalAndTranslation(exampleText, exampleTranslationText));
                 }
             }
         }
@@ -100,7 +100,7 @@ bool Translator::parseResultAndFillWord(const QByteArray& reply, Word& word)
 
 bool Translator::getTranslation(QByteArray& reply, const Word& word, QNetworkAccessManager* networkManager)
 {
-    if (state != TranslatorState::Initialized) return false;
+    if (m_state != TranslatorState::Initialized) return false;
 
     QNetworkRequest request;
     QNetworkReply*  _reply = NULL;
@@ -110,7 +110,7 @@ bool Translator::getTranslation(QByteArray& reply, const Word& word, QNetworkAcc
     request.setSslConfiguration(config);
     request.setUrl(QUrl("https://dictionary.yandex.net/api/v1/dicservice.json/"
                         "lookup?key=" +
-                        apiKey + "&lang=en-ru&text=" + word.word()));
+                        m_apiKey + "&lang=en-ru&text=" + word.word()));
     request.setHeader(QNetworkRequest::ServerHeader, "application/json");
 
     QEventLoop loop;
@@ -132,12 +132,12 @@ bool Translator::loadKey(const QString& keyFileName, QString Key)
     if (keyFile.exists())
     {
         keyFile.open(QIODevice::ReadOnly);
-        apiKey = keyFile.readAll();
-        state  = TranslatorState::Initialized;
+        m_apiKey = keyFile.readAll();
+        m_state  = TranslatorState::Initialized;
         return true;
     }
 
-    state = TranslatorState::InitializationError;
+    m_state = TranslatorState::InitializationError;
 
     return false;
 }
