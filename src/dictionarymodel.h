@@ -16,6 +16,7 @@ enum DictionaryModelState
 };
 }
 
+// TODO: Split dictionary and model
 class DictionaryModel : public QAbstractListModel
 {
     Q_OBJECT

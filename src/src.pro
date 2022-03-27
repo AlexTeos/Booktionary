@@ -12,6 +12,7 @@ SOURCES += \
         main.cpp \
         outputgenerator.cpp \
         translator.cpp\
+        translatorcache.cpp \
         word.cpp
 
 RESOURCES += ui/qml.qrc
@@ -32,6 +33,7 @@ HEADERS += \
     inputparser.h \
     outputgenerator.h \
     translator.h \
+    translatorcache.h \
     word.h
 
 DISTFILES +=

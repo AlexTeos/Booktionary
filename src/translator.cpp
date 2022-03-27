@@ -33,6 +33,11 @@ bool Translator::initialize(const QString& keyFileName)
     return false;
 }
 
+void Translator::clearCache()
+{
+    m_cache.clear();
+}
+
 bool Translator::parseResultAndFillWord(const QByteArray& reply, Word& word)
 {
     QJsonDocument jsonDocument(QJsonDocument::fromJson(reply));
@@ -119,18 +124,27 @@ bool Translator::loadKey(const QString& keyFileName, QString Key)
 
 bool Translator::translate(Word& word, QNetworkAccessManager* networkManager)
 {
-    QByteArray translation;
-    if (networkManager == nullptr)
+    bool isWordCached = m_cache.get(word);
+
+    if (!isWordCached)
     {
-        QScopedPointer<QNetworkAccessManager> localNetworkManager(new QNetworkAccessManager());
-        if (not getTranslation(translation, word, localNetworkManager.get())) return false;
-    }
-    else
-    {
-        if (not getTranslation(translation, word, networkManager)) return false;
+        QByteArray translation;
+        if (networkManager == nullptr)
+        {
+            QScopedPointer<QNetworkAccessManager> localNetworkManager(new QNetworkAccessManager());
+            if (not getTranslation(translation, word, localNetworkManager.get())) return false;
+        }
+        else
+        {
+            if (not getTranslation(translation, word, networkManager)) return false;
+        }
+
+        // TODO: Handle network errors
+        if (not parseResultAndFillWord(translation, word)) return false;
+
+        m_cache.store(word);
     }
 
-    if (not parseResultAndFillWord(translation, word)) return false;
     return true;
 }
 

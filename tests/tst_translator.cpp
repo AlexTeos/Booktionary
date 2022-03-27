@@ -366,6 +366,8 @@ void TestTranslator::cleanupTestCase() {}
 
 void TestTranslator::testTranslate()
 {
+    m_translator.clearCache();
+
     foreach(auto word, WordsToTranslateS)
     {
         Word w(word);

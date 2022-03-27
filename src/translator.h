@@ -3,7 +3,7 @@
 
 #include <QNetworkAccessManager>
 
-#include "word.h"
+#include "translatorcache.h"
 
 enum TranslatorState
 {
@@ -21,6 +21,7 @@ public:
     bool translate(Word& word, QNetworkAccessManager* networkManager = nullptr);
     bool translateN(QList<Word>::iterator iter, qsizetype n);
     bool translateNMT(QList<Word>::iterator iter, qsizetype n);
+    void clearCache();
 
 private:
     bool parseResultAndFillWord(const QByteArray& reply, Word& word);
@@ -29,6 +30,7 @@ private:
 
     QString         m_apiKey;
     TranslatorState m_state;
+    TranslatorCache m_cache;
 };
 
 #endif // TRANSLATOR_H
