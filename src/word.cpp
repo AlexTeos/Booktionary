@@ -41,11 +41,11 @@ QStringList Word::meanings() const
 {
     QStringList out;
     out.reserve(m_definitions.size());
-    QMultiMapIterator<PartOfSpeach, Definition> i(m_definitions);
+    QMultiMapIterator<PartOfSpeech, Definition> i(m_definitions);
     while (i.hasNext())
     {
         i.next();
-        out.push_back(PartOfSpeachumToQString[i.key()] + ": " + i.value().m_meanings.join(", "));
+        out.push_back(PartOfSpeechumToQString[i.key()] + ": " + i.value().m_meanings.join(", "));
     }
     return out;
 }
@@ -88,9 +88,9 @@ Definition::Definition(const QJsonObject& definitionJson)
         }
     }
 
-    if (definitionJson.contains("part_of_speach") && definitionJson["part_of_speach"].isString())
+    if (definitionJson.contains("part_of_speech") && definitionJson["part_of_speech"].isString())
     {
-        m_pos = StringPosToEnumPos(definitionJson["part_of_speach"].toString());
+        m_pos = StringPosToEnumPos(definitionJson["part_of_speech"].toString());
     }
 
     if (definitionJson.contains("examples") && definitionJson["examples"].isArray())
@@ -137,7 +137,7 @@ QJsonValue Definition::toJson() const
 
     jsonObject.insert("meanings", meaningsArray);
     jsonObject.insert("examples", examplessArray);
-    jsonObject.insert("part_of_speach", PartOfSpeachumToQString[m_pos]);
+    jsonObject.insert("part_of_speech", PartOfSpeechumToQString[m_pos]);
 
     return jsonObject;
 }

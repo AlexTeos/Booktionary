@@ -32,7 +32,7 @@ void TestTranslatorCache::testAll()
             w.setState(WordState::Translated);
 
             Definition definition;
-            definition.m_pos = PartOfSpeach::Noun;
+            definition.m_pos = PartOfSpeech::Noun;
             definition.m_meanings.push_back("значение");
             definition.m_examples.push_back(OriginalAndTranslation("example1", "пример1"));
             definition.m_examples.push_back(OriginalAndTranslation("example2", "пример2"));
@@ -55,7 +55,7 @@ void TestTranslatorCache::testAll()
         {
             QVERIFY(definition.m_meanings.size() == 1);
             QVERIFY(definition.m_meanings[0] == "значение");
-            QVERIFY(definition.m_pos == PartOfSpeach::Noun);
+            QVERIFY(definition.m_pos == PartOfSpeech::Noun);
 
             int i = 1;
             foreach(const OriginalAndTranslation& example, definition)

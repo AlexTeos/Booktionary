@@ -14,5 +14,5 @@ int main(int argc, char* argv[])
     TestTranslatorCache tst_translatorCache;
     QTEST_SET_MAIN_SOURCE_PATH
     return QTest::qExec(&tst_inputparser, argc, argv) or QTest::qExec(&tst_outputGenerator, argc, argv) or
-           QTest::qExec(&tst_translatorCache, argc, argv) /*or QTest::qExec(&tst_translator, argc, argv)*/;
+           QTest::qExec(&tst_translatorCache, argc, argv) or QTest::qExec(&tst_translator, argc, argv);
 }

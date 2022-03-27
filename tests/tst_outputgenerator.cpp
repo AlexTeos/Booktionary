@@ -19,7 +19,7 @@ void TestOutputGenerator::testGenerateOutput()
 
             definition.m_meanings.push_back("поражение");
 
-            definition.m_pos = PartOfSpeach::Noun;
+            definition.m_pos = PartOfSpeech::Noun;
 
             definition.m_examples.push_back(OriginalAndTranslation("military defeat", "военное поражение"));
             definition.m_examples.push_back(OriginalAndTranslation("cause of his defeat", "причина его поражения"));
@@ -30,7 +30,7 @@ void TestOutputGenerator::testGenerateOutput()
         {
             Definition definition;
 
-            definition.m_pos = PartOfSpeach::Verb;
+            definition.m_pos = PartOfSpeech::Verb;
 
             definition.m_meanings.push_back("одержать победу");
             definition.m_meanings.push_back("разгромить");
@@ -46,7 +46,7 @@ void TestOutputGenerator::testGenerateOutput()
         {
             Definition definition;
 
-            definition.m_pos = PartOfSpeach::Adjective;
+            definition.m_pos = PartOfSpeech::Adjective;
 
             definition.m_meanings.push_back("поверженный");
 
@@ -59,7 +59,7 @@ void TestOutputGenerator::testGenerateOutput()
         {
             Definition definition;
 
-            definition.m_pos = PartOfSpeach::Participle;
+            definition.m_pos = PartOfSpeech::Participle;
 
             definition.m_meanings.push_back("подавленный");
             definition.m_meanings.push_back("сплющенный");
@@ -74,7 +74,7 @@ void TestOutputGenerator::testGenerateOutput()
         {
             Definition definition;
 
-            definition.m_pos = PartOfSpeach::Adjective;
+            definition.m_pos = PartOfSpeech::Adjective;
 
             definition.m_meanings.push_back("унылый");
             definition.m_meanings.push_back("депрессивный");
@@ -94,7 +94,7 @@ void TestOutputGenerator::testGenerateOutput()
         {
             Definition definition;
 
-            definition.m_pos = PartOfSpeach::Verb;
+            definition.m_pos = PartOfSpeech::Verb;
 
             definition.m_meanings.push_back("догнать");
             definition.m_meanings.push_back("наверстать упущенное");

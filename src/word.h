@@ -17,7 +17,7 @@ enum WordState
 };
 }
 
-enum PartOfSpeach
+enum PartOfSpeech
 {
     Unknown = 0,
     Verb,
@@ -32,7 +32,7 @@ enum PartOfSpeach
     Participle
 };
 
-const QString PartOfSpeachumToQString[11] = {"Unknown",
+const QString PartOfSpeechumToQString[11] = {"Unknown",
                                              "Verb",
                                              "Noun",
                                              "Adjective",
@@ -44,31 +44,31 @@ const QString PartOfSpeachumToQString[11] = {"Unknown",
                                              "Interjection",
                                              "Participle"};
 
-inline PartOfSpeach StringPosToEnumPos(const QString& pos)
+inline PartOfSpeech StringPosToEnumPos(const QString& pos)
 {
     QString posLower = pos.toLower();
     if (posLower == "verb")
-        return PartOfSpeach::Verb;
+        return PartOfSpeech::Verb;
     else if (posLower == "noun")
-        return PartOfSpeach::Noun;
+        return PartOfSpeech::Noun;
     else if (posLower == "adjective")
-        return PartOfSpeach::Adjective;
+        return PartOfSpeech::Adjective;
     else if (posLower == "determiner")
-        return PartOfSpeach::Determiner;
+        return PartOfSpeech::Determiner;
     else if (posLower == "adverb")
-        return PartOfSpeach::Adverb;
+        return PartOfSpeech::Adverb;
     else if (posLower == "pronoun")
-        return PartOfSpeach::Pronoun;
+        return PartOfSpeech::Pronoun;
     else if (posLower == "preposition")
-        return PartOfSpeach::Preposition;
+        return PartOfSpeech::Preposition;
     else if (posLower == "conjunction")
-        return PartOfSpeach::Conjunction;
+        return PartOfSpeech::Conjunction;
     else if (posLower == "interjection")
-        return PartOfSpeach::Interjection;
+        return PartOfSpeech::Interjection;
     else if (posLower == "participle")
-        return PartOfSpeach::Participle;
+        return PartOfSpeech::Participle;
     else
-        return PartOfSpeach::Unknown;
+        return PartOfSpeech::Unknown;
 }
 
 typedef QPair<QString, QString>         OriginalAndTranslation;
@@ -85,7 +85,7 @@ struct Definition
 
     OriginalAndTranslationList m_examples;
     QStringList                m_meanings;
-    PartOfSpeach               m_pos = PartOfSpeach::Unknown;
+    PartOfSpeech               m_pos = PartOfSpeech::Unknown;
 
     QJsonValue toJson() const;
 };
@@ -97,7 +97,7 @@ public:
     Word(const QString& word) : m_word(word), m_state(WordState::Untranslated) {}
     explicit Word(const QJsonObject& jsonWord);
 
-    typedef QMultiMap<PartOfSpeach, Definition> Definitions;
+    typedef QMultiMap<PartOfSpeech, Definition> Definitions;
     void                                        addDefinition(const Definition& definition);
 
     using const_iterator = Definitions::const_iterator;
