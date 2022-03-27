@@ -33,32 +33,6 @@ bool Translator::initialize(const QString& keyFileName)
     return false;
 }
 
-PartOfSpeach Translator::localPOStoWordPOS(const QString localPOS)
-{
-    if (localPOS == "verb")
-        return PartOfSpeach::Verb;
-    else if (localPOS == "noun")
-        return PartOfSpeach::Noun;
-    else if (localPOS == "adjective")
-        return PartOfSpeach::Adjective;
-    else if (localPOS == "determiner")
-        return PartOfSpeach::Determiner;
-    else if (localPOS == "adverb")
-        return PartOfSpeach::Adverb;
-    else if (localPOS == "pronoun")
-        return PartOfSpeach::Pronoun;
-    else if (localPOS == "preposition")
-        return PartOfSpeach::Preposition;
-    else if (localPOS == "conjunction")
-        return PartOfSpeach::Conjunction;
-    else if (localPOS == "interjection")
-        return PartOfSpeach::Interjection;
-    else if (localPOS == "participle")
-        return PartOfSpeach::Participle;
-    else
-        return PartOfSpeach::Unknown;
-}
-
 bool Translator::parseResultAndFillWord(const QByteArray& reply, Word& word)
 {
     QJsonDocument jsonDocument(QJsonDocument::fromJson(reply));
@@ -68,9 +42,10 @@ bool Translator::parseResultAndFillWord(const QByteArray& reply, Word& word)
 
     foreach(QJsonValueRef partOfSpeach, partOfSpeaches)
     {
-        QString    partofspch   = partOfSpeach.toObject().take("pos").toString();
-        QJsonArray translations = partOfSpeach.toObject().take("tr").toArray();
+        QString    curPartOfSpeach = partOfSpeach.toObject().take("pos").toString();
+        QJsonArray translations    = partOfSpeach.toObject().take("tr").toArray();
         Definition definition;
+        definition.m_pos = StringPosToEnumPos(curPartOfSpeach);
         foreach(QJsonValueRef translation, translations)
         {
             definition.m_meanings.push_back(translation.toObject().take("text").toString());
@@ -90,7 +65,7 @@ bool Translator::parseResultAndFillWord(const QByteArray& reply, Word& word)
                 }
             }
         }
-        word.addDefinition(localPOStoWordPOS(partofspch), definition);
+        word.addDefinition(definition);
     }
 
     word.setState(partOfSpeaches.size() ? WordState::Translated : WordState::TranslationNotFound);

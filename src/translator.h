@@ -17,11 +17,10 @@ class Translator
 public:
     Translator();
     Translator(const QString& keyFileName);
-    bool         initialize(const QString& keyFileName);
-    bool         translate(Word& word, QNetworkAccessManager* networkManager = nullptr);
-    bool         translateN(QList<Word>::iterator iter, qsizetype n);
-    bool         translateNMT(QList<Word>::iterator iter, qsizetype n);
-    PartOfSpeach localPOStoWordPOS(const QString localPOS);
+    bool initialize(const QString& keyFileName);
+    bool translate(Word& word, QNetworkAccessManager* networkManager = nullptr);
+    bool translateN(QList<Word>::iterator iter, qsizetype n);
+    bool translateNMT(QList<Word>::iterator iter, qsizetype n);
 
 private:
     bool parseResultAndFillWord(const QByteArray& reply, Word& word);

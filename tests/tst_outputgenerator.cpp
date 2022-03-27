@@ -19,14 +19,18 @@ void TestOutputGenerator::testGenerateOutput()
 
             definition.m_meanings.push_back("поражение");
 
+            definition.m_pos = PartOfSpeach::Noun;
+
             definition.m_examples.push_back(OriginalAndTranslation("military defeat", "военное поражение"));
             definition.m_examples.push_back(OriginalAndTranslation("cause of his defeat", "причина его поражения"));
             definition.m_examples.push_back(OriginalAndTranslation("suffer defeat", "потерпеть поражение"));
 
-            word.addDefinition(PartOfSpeach::Noun, definition);
+            word.addDefinition(definition);
         }
         {
             Definition definition;
+
+            definition.m_pos = PartOfSpeach::Verb;
 
             definition.m_meanings.push_back("одержать победу");
             definition.m_meanings.push_back("разгромить");
@@ -37,14 +41,16 @@ void TestOutputGenerator::testGenerateOutput()
 
             definition.m_examples.push_back(OriginalAndTranslation("defeated country", "побежденная страна"));
 
-            word.addDefinition(PartOfSpeach::Verb, definition);
+            word.addDefinition(definition);
         }
         {
             Definition definition;
 
+            definition.m_pos = PartOfSpeach::Adjective;
+
             definition.m_meanings.push_back("поверженный");
 
-            word.addDefinition(PartOfSpeach::Adjective, definition);
+            word.addDefinition(definition);
         }
         dictionary.addWord(word);
     }
@@ -52,6 +58,8 @@ void TestOutputGenerator::testGenerateOutput()
         Word word("depressed");
         {
             Definition definition;
+
+            definition.m_pos = PartOfSpeach::Participle;
 
             definition.m_meanings.push_back("подавленный");
             definition.m_meanings.push_back("сплющенный");
@@ -61,10 +69,12 @@ void TestOutputGenerator::testGenerateOutput()
 
             definition.m_examples.push_back(OriginalAndTranslation("Such weather depressed me.", ""));
 
-            word.addDefinition(PartOfSpeach::Participle, definition);
+            word.addDefinition(definition);
         }
         {
             Definition definition;
+
+            definition.m_pos = PartOfSpeach::Adjective;
 
             definition.m_meanings.push_back("унылый");
             definition.m_meanings.push_back("депрессивный");
@@ -75,7 +85,7 @@ void TestOutputGenerator::testGenerateOutput()
             definition.m_examples.push_back(
                 OriginalAndTranslation("She became deeply depressed when her husband died.", ""));
 
-            word.addDefinition(PartOfSpeach::Adjective, definition);
+            word.addDefinition(definition);
         }
         dictionary.addWord(word);
     }
@@ -84,12 +94,14 @@ void TestOutputGenerator::testGenerateOutput()
         {
             Definition definition;
 
+            definition.m_pos = PartOfSpeach::Verb;
+
             definition.m_meanings.push_back("догнать");
             definition.m_meanings.push_back("наверстать упущенное");
             definition.m_meanings.push_back("поспевать");
             definition.m_meanings.push_back("подтянуться");
 
-            word.addDefinition(PartOfSpeach::Verb, definition);
+            word.addDefinition(definition);
         }
         dictionary.addWord(word);
     }

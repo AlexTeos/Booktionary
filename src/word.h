@@ -43,6 +43,33 @@ const QString PartOfSpeachumToQString[11] = {"Unknown",
                                              "Interjection",
                                              "Participle"};
 
+inline PartOfSpeach StringPosToEnumPos(const QString& pos)
+{
+    QString posLower = pos.toLower();
+    if (posLower == "verb")
+        return PartOfSpeach::Verb;
+    else if (posLower == "noun")
+        return PartOfSpeach::Noun;
+    else if (posLower == "adjective")
+        return PartOfSpeach::Adjective;
+    else if (posLower == "determiner")
+        return PartOfSpeach::Determiner;
+    else if (posLower == "adverb")
+        return PartOfSpeach::Adverb;
+    else if (posLower == "pronoun")
+        return PartOfSpeach::Pronoun;
+    else if (posLower == "preposition")
+        return PartOfSpeach::Preposition;
+    else if (posLower == "conjunction")
+        return PartOfSpeach::Conjunction;
+    else if (posLower == "interjection")
+        return PartOfSpeach::Interjection;
+    else if (posLower == "participle")
+        return PartOfSpeach::Participle;
+    else
+        return PartOfSpeach::Unknown;
+}
+
 typedef QPair<QString, QString>         OriginalAndTranslation;
 typedef QVector<OriginalAndTranslation> OriginalAndTranslationList;
 
@@ -54,6 +81,7 @@ struct Definition
 
     OriginalAndTranslationList m_examples;
     QStringList                m_meanings;
+    PartOfSpeach               m_pos = PartOfSpeach::Unknown;
 };
 
 class Word
@@ -62,7 +90,7 @@ public:
     Word(const QString& word) : m_word(word), m_state(WordState::Untranslated) {}
 
     typedef QMultiMap<PartOfSpeach, Definition> Definitions;
-    void addDefinition(const PartOfSpeach& PartOfSpeach, const Definition& definition);
+    void                                        addDefinition(const Definition& definition);
 
     using const_iterator = Definitions::const_iterator;
     const_iterator begin() const { return m_definitions.cbegin(); }

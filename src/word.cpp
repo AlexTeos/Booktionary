@@ -2,7 +2,7 @@
 
 void Word::addDefinition(const PartOfSpeach& PartOfSpeach, const Definition& definition)
 {
-    if (not m_definitions.contains(PartOfSpeach)) m_definitions.insert(PartOfSpeach, definition);
+    if (not m_definitions.contains(definition.m_pos)) m_definitions.insert(definition.m_pos, definition);
 }
 
 QString Word::word() const
@@ -18,7 +18,7 @@ QStringList Word::meanings() const
     while (i.hasNext())
     {
         i.next();
-        out.push_back(PartOfSpeachumToQString[i.key()] + ": " + i.value().m_meaning.join(", "));
+        out.push_back(PartOfSpeachumToQString[i.key()] + ": " + i.value().m_meanings.join(", "));
     }
     return out;
 }
