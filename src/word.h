@@ -1,6 +1,7 @@
 #ifndef WORD_H
 #define WORD_H
 
+#include <QJsonValue>
 #include <QList>
 #include <QMultiMap>
 #include <QPair>
@@ -75,6 +76,9 @@ typedef QVector<OriginalAndTranslation> OriginalAndTranslationList;
 
 struct Definition
 {
+    Definition(){};
+    explicit Definition(const QJsonObject& definitionJson);
+
     using const_iterator = OriginalAndTranslationList::const_iterator;
     const_iterator begin() const { return m_examples.cbegin(); }
     const_iterator end() const { return m_examples.cend(); }
@@ -82,12 +86,16 @@ struct Definition
     OriginalAndTranslationList m_examples;
     QStringList                m_meanings;
     PartOfSpeach               m_pos = PartOfSpeach::Unknown;
+
+    QJsonValue toJson() const;
 };
 
 class Word
 {
 public:
+    Word() {}
     Word(const QString& word) : m_word(word), m_state(WordState::Untranslated) {}
+    explicit Word(const QJsonObject& jsonWord);
 
     typedef QMultiMap<PartOfSpeach, Definition> Definitions;
     void                                        addDefinition(const Definition& definition);
@@ -99,6 +107,8 @@ public:
     WordState::WordState state() const;
     QString              word() const;
     QStringList          meanings() const;
+
+    QJsonValue toJson() const;
 
     void setState(WordState::WordState newState);
 
