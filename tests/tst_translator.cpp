@@ -364,6 +364,56 @@ void TestTranslator::initTestCase()
 
 void TestTranslator::cleanupTestCase() {}
 
+void TestTranslator::testTranslateParser()
+{
+    m_translator.clearCache();
+
+    Word w("cab");
+    QVERIFY(m_translator.translate(w));
+
+    QVERIFY(std::distance(w.begin(), w.end()) == 3);
+
+    quint8 presenceFlag = 0;
+    for (const auto& definition : w)
+    {
+        switch (definition.m_pos)
+        {
+            case PartOfSpeech::Unknown:
+                QVERIFY(definition.m_meanings.size() == 1);
+                QVERIFY(definition.m_meanings[0] == "CAB");
+                QVERIFY(definition.m_examples.size() == 0);
+                presenceFlag |= 0x1;
+                break;
+            case PartOfSpeech::Verb:
+                QVERIFY(definition.m_meanings.size() == 1);
+                QVERIFY(definition.m_meanings[0] == "ехать на такси");
+                QVERIFY(definition.m_examples.size() == 0);
+                presenceFlag |= 0x2;
+                break;
+            case PartOfSpeech::Noun:
+                QVERIFY(definition.m_meanings.size() == 7);
+                QVERIFY(definition.m_meanings[0] == "кэб");
+                QVERIFY(definition.m_meanings[1] == "кабина");
+                QVERIFY(definition.m_meanings[2] == "такси");
+                QVERIFY(definition.m_meanings[3] == "экипаж");
+                QVERIFY(definition.m_meanings[4] == "пролетка");
+                QVERIFY(definition.m_meanings[5] == "наемный экипаж");
+                QVERIFY(definition.m_meanings[6] == "кабина управления");
+                QVERIFY(definition.m_examples.size() == 2);
+                QVERIFY(definition.m_examples[0].first == "truck cab");
+                QVERIFY(definition.m_examples[0].second == "кабина грузовика");
+                QVERIFY(definition.m_examples[1].first == "take a cab");
+                QVERIFY(definition.m_examples[1].second == "взять такси");
+                presenceFlag |= 0x4;
+                break;
+            default:
+                QFAIL("");
+        }
+    }
+
+    QVERIFY(presenceFlag == 7);
+}
+
 void TestTranslator::testTranslate()
 {
     m_translator.clearCache();
@@ -377,6 +427,8 @@ void TestTranslator::testTranslate()
 
 void TestTranslator::testTranslateN()
 {
+    m_translator.clearCache();
+
     QList<Word> dictionary;
 
     foreach(auto word, WordsToTranslateM)

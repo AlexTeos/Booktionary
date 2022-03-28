@@ -41,39 +41,70 @@ void Translator::clearCache()
 bool Translator::parseResultAndFillWord(const QByteArray& reply, Word& word)
 {
     QJsonDocument jsonDocument(QJsonDocument::fromJson(reply));
-    QJsonObject   jsonObject     = jsonDocument.object();
-    QJsonValue    jsonObjectDef  = jsonObject.take("def");
-    QJsonArray    partOfSpeaches = jsonObjectDef.toArray();
+    if (not jsonDocument.isObject()) return false;
+    QJsonObject jsonObject = jsonDocument.object();
+    if (not jsonObject.contains("def") or not jsonObject["def"].isArray()) return false;
 
-    foreach(QJsonValueRef partOfSpeach, partOfSpeaches)
+    QJsonArray definitionJsonArray = jsonObject["def"].toArray();
+    for (const auto& definitionJson : definitionJsonArray)
     {
-        QString    curPartOfSpeach = partOfSpeach.toObject().take("pos").toString();
-        QJsonArray translations    = partOfSpeach.toObject().take("tr").toArray();
+        if (not definitionJson.isObject()) continue;
+
         Definition definition;
-        definition.m_pos = StringPosToEnumPos(curPartOfSpeach);
-        foreach(QJsonValueRef translation, translations)
+
+        QJsonObject definitionObject = definitionJson.toObject();
+        if (definitionObject.contains("pos") and definitionObject["pos"].isString())
+            definition.m_pos = StringPosToEnumPos(definitionObject["pos"].toString());
+
+        if (definitionObject.contains("tr") and definitionObject["tr"].isArray())
         {
-            definition.m_meanings.push_back(translation.toObject().take("text").toString());
-
-            QJsonArray examples = translation.toObject().take("ex").toArray();
-
-            foreach(QJsonValueRef example, examples)
+            QJsonArray translationsJsonArray = definitionObject["tr"].toArray();
+            for (const auto& translationJson : translationsJsonArray)
             {
-                QString exampleText = example.toObject().take("text").toString();
+                if (not translationJson.isObject()) continue;
 
-                QJsonArray exampleTranslationArray = example.toObject().take("tr").toArray();
-                QString    exampleTranslationText;
-                foreach(QJsonValueRef exampleTranslation, exampleTranslationArray)
+                QJsonObject translation = translationJson.toObject();
+                if (translation.contains("text") and translation["text"].isString())
+                    definition.m_meanings.append(translation["text"].toString());
+
+                if (translation.contains("ex") and translation["ex"].isArray())
                 {
-                    exampleTranslationText += exampleTranslation.toObject().take("text").toString();
-                    definition.m_examples.push_back(OriginalAndTranslation(exampleText, exampleTranslationText));
+                    QJsonArray examplesJsonArray = translation["ex"].toArray();
+                    for (const auto& exampleJson : examplesJsonArray)
+                    {
+                        if (not exampleJson.isObject()) continue;
+
+                        QJsonObject exampleObject = exampleJson.toObject();
+
+                        QString example;
+                        if (exampleObject.contains("text") and exampleObject["text"].isString())
+                            example = exampleObject["text"].toString();
+
+                        if (exampleObject.contains("tr") and exampleObject["tr"].isArray())
+                        {
+                            QJsonArray exampleTranslationArray = exampleObject["tr"].toArray();
+                            QString    exampleTranslationText;
+                            for (const auto& exampleTranslationJson : exampleTranslationArray)
+                            {
+                                if (not exampleTranslationJson.isObject()) continue;
+
+                                QJsonObject exampleTranslationObject = exampleTranslationJson.toObject();
+
+                                if (exampleTranslationObject.contains("text") and
+                                    exampleTranslationObject["text"].isString())
+                                    exampleTranslationText = exampleTranslationObject["text"].toString();
+                            }
+
+                            definition.m_examples.push_back(OriginalAndTranslation(example, exampleTranslationText));
+                        }
+                    }
                 }
             }
         }
         word.addDefinition(definition);
     }
 
-    word.setState(partOfSpeaches.size() ? WordState::Translated : WordState::TranslationNotFound);
+    word.setState(definitionJsonArray.size() ? WordState::Translated : WordState::TranslationNotFound);
 
     return true;
 }
@@ -85,6 +116,7 @@ bool Translator::getTranslation(QByteArray& reply, const Word& word, QNetworkAcc
     QNetworkRequest request;
     QNetworkReply*  _reply = NULL;
 
+    // TODO: try to use flags
     QSslConfiguration config = QSslConfiguration::defaultConfiguration();
     config.setProtocol(QSsl::TlsV1_2);
     request.setSslConfiguration(config);
@@ -126,6 +158,7 @@ bool Translator::translate(Word& word, QNetworkAccessManager* networkManager)
 {
     bool isWordCached = m_cache.get(word);
 
+    // TODO: change to if (word.m_state != WordState::Translated)
     if (!isWordCached)
     {
         QByteArray translation;

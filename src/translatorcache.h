@@ -15,6 +15,7 @@ public:
 
 private:
     // TODO: add lazy load/save
+    // TODO: add multithread load/save
     bool save() const;
     bool load();
 

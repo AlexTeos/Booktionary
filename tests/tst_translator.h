@@ -10,6 +10,7 @@ class TestTranslator : public QObject
 private slots:
     void initTestCase();
     void cleanupTestCase();
+    void testTranslateParser();
     void testTranslate();
     void testTranslateN();
 

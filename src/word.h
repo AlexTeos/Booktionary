@@ -17,6 +17,7 @@ enum WordState
 };
 }
 
+// TODO: check Unknown cases
 enum PartOfSpeech
 {
     Unknown = 0,
